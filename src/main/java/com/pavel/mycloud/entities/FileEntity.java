@@ -1,71 +1,46 @@
 package com.pavel.mycloud.entities;
 
-import com.pavel.mycloud.dtos.CreateFileDTO;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.persistence.*;
-import java.io.IOException;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity(name = "files")
-public class FileEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class FileEntity extends BaseFileEntity {
 
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "parent_folder_id")
+    private FolderEntity parentFolder;
 
+    @Column(name = "type")
     private String type;
 
-//    private FolderEntity parentFolder;
+    //@Lob
+    //private byte[] content;
 
-    public Long getId() {
-        return id;
+    public FolderEntity getParentFolder() {
+        return parentFolder;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setParentFolder(FolderEntity parentFolder) {
+        this.parentFolder = parentFolder;
     }
 
-    public String getName() {
-        return name;
-    }
+// Other metadata
 
-    public void setName(String name) {
-        this.name = name;
-    }
+//    public FileEntity() {
+//    }
+//    public FileEntity(CreateFileDTO fileDTO) throws IOException {
+//        super(fileDTO.getName(), fileDTO.getPath());
+//        this.type = "txt";
+//        this.content = fileDTO.getContent().getBytes();
+//    }
+//
+//    public FileEntity(MultipartFile file) throws IOException {
+//        super(fileDTO.getName(), fileDTO.getPath());
+//        this.type = "txt";
+//        this.content = file.getBytes();
+//    }
 
-    public String getType() {
-        return type;
-    }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public byte[] getContent() {
-        return content;
-    }
-
-    public void setContent(byte[] content) {
-        this.content = content;
-    }
-
-    // Other metadata
-    @Lob
-    private byte[] content;
-
-    public FileEntity() {
-    }
-
-    public FileEntity(CreateFileDTO fileDTO) throws IOException {
-        this.name = fileDTO.getName();
-        this.type = "txt";
-        this.content = fileDTO.getContent().getBytes();
-    }
-
-    public FileEntity(MultipartFile file) throws IOException {
-        this.name = file.getOriginalFilename();
-        this.type = "txt";
-        this.content = file.getBytes();
-    }
 }

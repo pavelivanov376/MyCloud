@@ -44,19 +44,19 @@ public class FileController {
 
         attributes.addFlashAttribute("message", "You successfully uploaded a file");
 
-        return "redirect:files/uploadFile.html";
-    }
-
-    @GetMapping("/download")
-    public String downloadFile(@Param("id") Long id, Model model, HttpServletResponse response) throws IOException {
-        FileEntity file = fileService.download(id);
-        response.setContentType("application/octet-stream");
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename = " + file.getName();
-        response.setHeader(headerKey, headerValue);
-        ServletOutputStream outputStream = response.getOutputStream();
-        outputStream.write(file.getContent());
-        outputStream.close();
         return "redirect:/";
     }
+
+//    @GetMapping("/download")
+//    public String downloadFile(@Param("id") Long id, Model model, HttpServletResponse response) throws IOException {
+//        FileEntity file = fileService.download(id);
+//        response.setContentType("application/octet-stream");
+//        String headerKey = "Content-Disposition";
+//        String headerValue = "attachment; filename = " + file.getName();
+//        response.setHeader(headerKey, headerValue);
+//        ServletOutputStream outputStream = response.getOutputStream();
+//        outputStream.write(file.getContent());
+//        outputStream.close();
+//        return "redirect:/";
+//    }
 }
