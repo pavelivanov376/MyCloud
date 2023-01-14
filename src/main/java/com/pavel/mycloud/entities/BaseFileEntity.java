@@ -21,6 +21,10 @@ public abstract class BaseFileEntity {
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
+//    @ManyToOne
+//    @JoinColumn(name = "parent_folder_id")
+//    private FolderEntity parentFolder;
+
     public BaseFileEntity() {
     }
 
