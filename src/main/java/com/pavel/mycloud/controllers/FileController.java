@@ -1,11 +1,13 @@
 package com.pavel.mycloud.controllers;
 
+import com.pavel.mycloud.dtos.CreateFileDTO;
 import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.services.FileService;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,15 +36,15 @@ public class FileController {
     }
 
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes) {
-        if (file.isEmpty()) {
-            attributes.addFlashAttribute("message", "Please select a file to upload.");
+    public String uploadFile(CreateFileDTO file, RedirectAttributes attributes) {
+        if (file.getContent() == null || file.getContent().isEmpty()) {
+            attributes.addFlashAttribute("message", "Unable to upload the file");
             return "redirect:/";
         }
 
         fileService.upload(file);
 
-        attributes.addFlashAttribute("message", "You successfully uploaded a file");
+        attributes.addFlashAttribute("message", "Successfully uploaded");
 
         return "redirect:/";
     }

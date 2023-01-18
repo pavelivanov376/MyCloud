@@ -2,11 +2,26 @@ package com.pavel.mycloud.services;
 
 import com.pavel.mycloud.dtos.CreateFileDTO;
 import com.pavel.mycloud.entities.FileEntity;
-import org.springframework.web.multipart.MultipartFile;
+import com.pavel.mycloud.repositories.FileRepository;
+import org.springframework.stereotype.Service;
 
-public interface FileService {
-//    void upload(CreateFileDTO fileDTO);
-    void upload(MultipartFile file);
+import java.io.IOException;
+@Service
+public class FileService {
+    private final FileRepository fileRepository;
 
-FileEntity download(Long id);
+    public FileService(FileRepository fileRepository) {
+        this.fileRepository = fileRepository;
+    }
+
+    public void upload(CreateFileDTO fileDTO) {
+        FileEntity fileEntity = null; //TODO get from factory
+
+        fileRepository.save(fileEntity);
+        //TODO return succeeded to upload response
+    }
+
+    public FileEntity download(Long id) {
+        return fileRepository.findById(id).get();
+    }
 }

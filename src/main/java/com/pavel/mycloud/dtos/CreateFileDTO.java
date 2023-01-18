@@ -2,19 +2,17 @@ package com.pavel.mycloud.dtos;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Lob;
-
 public class CreateFileDTO {
 
-    private String name;
+    private String fullPath;
     private MultipartFile content;
 
-    public String getName() {
-        return name;
+    public String getFullPath() {
+        return fullPath;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullPath(String fullPath) {
+        this.fullPath = fullPath;
     }
 
     public MultipartFile getContent() {
