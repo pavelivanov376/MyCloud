@@ -21,10 +21,6 @@ public abstract class BaseFileEntity {
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
-//    @ManyToOne
-//    @JoinColumn(name = "parent_folder_id")
-//    private FolderEntity parentFolder;
-
     public BaseFileEntity() {
     }
 
@@ -57,5 +53,21 @@ public abstract class BaseFileEntity {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 }

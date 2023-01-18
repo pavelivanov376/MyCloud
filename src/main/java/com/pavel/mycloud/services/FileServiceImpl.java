@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 @Service
-public class FileServiceImpl/* implements FileService */{
+public class FileServiceImpl implements FileService {
 
     private final FileRepository fileRepository;
 //    private final ModelMapper mapper;
@@ -36,19 +36,19 @@ public class FileServiceImpl/* implements FileService */{
 //        //TODO return succeeded to upload response
 //    }
 
-//    public void upload(MultipartFile file) {
-//        FileEntity fileEntity = null;
-//        try {
-//            fileEntity = new FileEntity(file);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        fileRepository.save(fileEntity);
-//    }
+    public void upload(MultipartFile file) {
+        FileEntity fileEntity = null;
+        try {
+            fileEntity = new FileEntity(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-//    @Override
-//    public FileEntity download(Long id) {
-//        return fileRepository.findById(id).get();
-//    }
+        fileRepository.save(fileEntity);
+    }
+
+    @Override
+    public FileEntity download(Long id) {
+        return fileRepository.findById(id).get();
+    }
 }
