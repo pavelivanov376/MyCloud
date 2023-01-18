@@ -1,13 +1,9 @@
 package com.pavel.mycloud.entities;
 
-import com.pavel.mycloud.dtos.CreateFileDTO;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import java.io.IOException;
 
 @Entity(name = "files")
 public class FileEntity extends BaseFileEntity {
@@ -20,22 +16,6 @@ public class FileEntity extends BaseFileEntity {
 
     @Lob
     private byte[] content;
-
-    public FileEntity() {
-
-    }
-//    public FileEntity(CreateFileDTO fileDTO) throws IOException {
-////        super(fileDTO.getName(), fileDTO.getPath());
-//        this.type = "txt";
-//        this.content = fileDTO.getContent().getBytes();
-//    }
-
-    public FileEntity(MultipartFile file) throws IOException {
-//        super(fileDTO.getName(), fileDTO.getPath());
-        this.type = "txt";
-        this.content = file.getBytes();
-    }
-
 
     public FolderEntity getParentFolder() {
         return parentFolder;

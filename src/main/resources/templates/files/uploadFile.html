@@ -14,7 +14,10 @@
                 <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
                 <form method="post" th:action="@{/upload}" enctype="multipart/form-data">
                     <div class="form-group">
-                        <input type="file" name="file" class="form-control-file">
+                        <input type="file" name="content" class="form-control-file">
+                    </div>
+                    <div >
+                        <input type="text" name="fullPath">
                     </div>
                     <button type="submit" class="btn btn-primary">Upload File</button>
                 </form>
