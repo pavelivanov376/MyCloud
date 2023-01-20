@@ -1,6 +1,9 @@
 package com.pavel.mycloud.entities;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -19,8 +22,8 @@ public class FolderEntity extends BaseFileEntity {
     public FolderEntity() {
     }
 
-    public FolderEntity(String name, String path, String owner, LocalDateTime creationDate) {
-        super(name, path, owner, creationDate);
+    public FolderEntity(String name, String owner, LocalDateTime creationDate) {
+        super(name, owner, creationDate);
     }
 
     public Set<FileEntity> getContainedFiles() {

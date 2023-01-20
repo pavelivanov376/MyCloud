@@ -19,7 +19,7 @@ public class CreateFileDTO {
         return content;
     }
 
-    public void setContent(MultipartFile content) {
-        this.content = content;
-    }
+//    public void setContent(MultipartFile content) {
+//        this.content = content;
+//    }
 }

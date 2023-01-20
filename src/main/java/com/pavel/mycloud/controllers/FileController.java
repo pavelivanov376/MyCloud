@@ -25,26 +25,26 @@ public class FileController {
         this.fileService = fileService;
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "files/uploadFile.html";
-    }
+//    @GetMapping("/")
+//    public String home() {
+//        return "files/uploadFile.html";
+//    }
 
-    @GetMapping("/upload")
-    public String uploadFile() {
-        return "files/uploadFile.html";
-    }
+//    @GetMapping("/upload")
+//    public String uploadFile() {
+//        return "files/uploadFile.html";
+//    }
 
-    @PostMapping("/upload")
+    @PostMapping("/createFile")
     public String uploadFile(CreateFileDTO file, RedirectAttributes attributes) {
         if (file.getContent() == null || file.getContent().isEmpty()) {
-            attributes.addFlashAttribute("message", "Unable to upload the file");
+            attributes.addFlashAttribute("messageCreateFile", "Unable to upload the file");
             return "redirect:/";
         }
 
         fileService.upload(file);
 
-        attributes.addFlashAttribute("message", "Successfully uploaded");
+        attributes.addFlashAttribute("messageCreateFile", "Successfully uploaded");
 
         return "redirect:/";
     }
