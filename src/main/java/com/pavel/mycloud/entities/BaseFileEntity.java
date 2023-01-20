@@ -12,10 +12,7 @@ public abstract class BaseFileEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "path", nullable = false)
-    private String path;
-
-    @Column(name = "owner", nullable = false)
+    @Column(name = "owner")
     private String owner;
 
     @Column(name = "creation_date")
@@ -24,9 +21,8 @@ public abstract class BaseFileEntity {
     public BaseFileEntity() {
     }
 
-    public BaseFileEntity(String name, String path, String owner, LocalDateTime creationDate) {
+    public BaseFileEntity(String name, String owner, LocalDateTime creationDate) {
         this.name = name;
-        this.path = path;
         this.owner = owner;
         this.creationDate = creationDate;
     }
@@ -45,14 +41,6 @@ public abstract class BaseFileEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public String getOwner() {

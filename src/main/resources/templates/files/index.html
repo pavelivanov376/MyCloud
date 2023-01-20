@@ -11,8 +11,8 @@
         <div class="row">
             <div class="col-md-8 mx-auto">
                 <h3>Upload a File in MyCloud</h3>
-                <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
-                <form method="post" th:action="@{/upload}" enctype="multipart/form-data">
+                <p th:text="${messageCreateFile}" th:if="${messageCreateFile ne null}" class="alert alert-primary"></p>
+                <form method="post" th:action="@{/createFile}" enctype="multipart/form-data">
                     <div class="form-group">
                         <input type="file" name="content" class="form-control-file">
                     </div>
@@ -22,8 +22,17 @@
                     <button type="submit" class="btn btn-primary">Upload File</button>
                 </form>
                 <br><br><br>
+                <h3>Upload a Folder in MyCloud</h3>
+                <p th:text="${messageCreateFolder}" th:if="${messageCreateFolder ne null}" class="alert alert-primary"></p>
+                <form method="post" th:action="@{/createFolder}">
+                    <div >
+                        <input type="text" name="fullPath">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload Folder</button>
+                </form>
+                <br><br><br>
                 <h3>Download a File from MyCloud</h3>
-                <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
+                <p th:text="${messageDownload}" th:if="${messageDownload ne null}" class="alert alert-primary"></p>
                 <form method="get" th:action="@{/download}" enctype="multipart/form-data">
                     <div class="form-group">
                         <input type="number" name="id" class="form-control-file">

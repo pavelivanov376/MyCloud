@@ -4,16 +4,18 @@ import com.pavel.mycloud.dtos.CreateFileDTO;
 import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.entities.FolderEntity;
 import com.pavel.mycloud.repositories.FolderRepository;
+import com.pavel.mycloud.services.FolderService;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-
+@Component
 public class FileEntityFactory {
-    private final FolderRepository folderRepository;
+    private final FolderService folderService;
 
-    public FileEntityFactory(FolderRepository folderRepository) {
-        this.folderRepository = folderRepository;
+    public FileEntityFactory(FolderService folderService) {
+        this.folderService = folderService;
     }
 
     public FileEntity createFileEntity(CreateFileDTO fileDTO) {
@@ -31,12 +33,11 @@ public class FileEntityFactory {
 
         fileEntity.setName(filename);
         fileEntity.setContent(contentBytes);
-        fileEntity.setPath(fileDTO.getFullPath());
         fileEntity.setOwner("Pavel");
         fileEntity.setType(extractFileType(filename));
         fileEntity.setCreationDate(LocalDateTime.now());
 
-        FolderEntity parentFolder = folderRepository.findByPath(fileDTO.getFullPath());
+        FolderEntity parentFolder = folderService.findByPath(fileDTO.getFullPath());
         fileEntity.setParentFolder(parentFolder);
 
         return fileEntity;
@@ -44,6 +45,6 @@ public class FileEntityFactory {
 
     private String extractFileType(String filename) {
         int indexOfDot = filename.indexOf('.');
-        return filename.substring(indexOfDot);
+        return filename.substring(indexOfDot + 1);
     }
 }
