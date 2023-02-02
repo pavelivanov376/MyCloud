@@ -6,6 +6,8 @@ import com.pavel.mycloud.factories.FileEntityFactory;
 import com.pavel.mycloud.repositories.FileRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class FileService {
     private final FileRepository fileRepository;
@@ -22,7 +24,11 @@ public class FileService {
         fileRepository.save(fileEntity);
     }
 
-    public FileEntity download(Long id) {
-        return fileRepository.findById(id).get();
+    public FileEntity download(String name) {
+        return fileRepository.findByName(name);
+    }
+
+    public Collection<FileEntity> getAllFiles() {
+        return fileRepository.findAll();
     }
 }

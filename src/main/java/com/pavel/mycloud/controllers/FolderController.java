@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class FolderController {
-    public final FolderService folderService;
+    private final FolderService folderService;
 
     public FolderController(FolderService folderService) {
         this.folderService = folderService;
