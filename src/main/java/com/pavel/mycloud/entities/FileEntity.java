@@ -1,9 +1,6 @@
 package com.pavel.mycloud.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity(name = "files")
 public class FileEntity extends BaseFileEntity {
@@ -14,6 +11,7 @@ public class FileEntity extends BaseFileEntity {
     @Column(name = "type")
     private String type;
 
+//    @Transient
     @Lob
     private byte[] content;
 
