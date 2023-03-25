@@ -1,15 +1,16 @@
 package com.pavel.mycloud.factories;
 
 import com.pavel.mycloud.dtos.CreateFileDTO;
+import com.pavel.mycloud.dtos.DownloadFileDTO;
 import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.entities.FolderEntity;
-import com.pavel.mycloud.repositories.FolderRepository;
 import com.pavel.mycloud.services.FolderService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+
 @Component
 public class FileEntityFactory {
     private final FolderService folderService;

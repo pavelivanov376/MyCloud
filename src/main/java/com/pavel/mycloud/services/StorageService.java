@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Service
 public class StorageService {
@@ -26,7 +28,7 @@ public class StorageService {
     }
 
     public String uploadFile(MultipartFile file) {
-        File fileObj = convertMultiPartFileToFile(file);
+        File fileObj = convertMultiPartFileToZipFile(file);
         String fileName = file.getOriginalFilename();
         s3Client.putObject(new PutObjectRequest(bucketName, fileName, fileObj));
 
@@ -52,7 +54,7 @@ public class StorageService {
         return null;
     }
 
-    private File convertMultiPartFileToFile(MultipartFile file) {
+    private File convertMultiPartFileToZipFile(MultipartFile file) {
         File convertedFile = new File(file.getOriginalFilename());
         try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
             fos.write(file.getBytes());

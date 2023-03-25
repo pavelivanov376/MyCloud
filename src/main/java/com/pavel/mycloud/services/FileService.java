@@ -1,12 +1,15 @@
 package com.pavel.mycloud.services;
 
 import com.pavel.mycloud.dtos.CreateFileDTO;
+import com.pavel.mycloud.dtos.DownloadFileDTO;
 import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.factories.FileEntityFactory;
 import com.pavel.mycloud.repositories.FileRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class FileService {
@@ -35,7 +38,14 @@ public class FileService {
         return file;
     }
 
-    public Collection<FileEntity> getAllFiles() {
-        return fileRepository.findAll();
+    public Collection<DownloadFileDTO> findAllFiles() {
+        Collection<DownloadFileDTO> downloadFileDTOS = new HashSet<>();
+
+        for (FileEntity file: fileRepository.findAll()) {
+            DownloadFileDTO fileDTO = new DownloadFileDTO();
+            fileDTO.setName(file.getName());
+            downloadFileDTOS.add(fileDTO);
+        }
+        return downloadFileDTOS;
     }
 }
