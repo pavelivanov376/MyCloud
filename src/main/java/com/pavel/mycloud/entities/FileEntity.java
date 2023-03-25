@@ -11,8 +11,7 @@ public class FileEntity extends BaseFileEntity {
     @Column(name = "type")
     private String type;
 
-//    @Transient
-    @Lob
+    @Transient
     private byte[] content;
 
     public FolderEntity getParentFolder() {

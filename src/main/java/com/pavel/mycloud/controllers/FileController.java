@@ -4,20 +4,23 @@ import com.pavel.mycloud.dtos.CreateFileDTO;
 import com.pavel.mycloud.dtos.DownloadFileDTO;
 import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.services.FileService;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
-import java.util.List;
 
-@Controller
+@RestController
 public class FileController {
     private final FileService fileService;
 
@@ -25,6 +28,21 @@ public class FileController {
         this.fileService = fileService;
     }
 
+    @GetMapping("/api/files")
+    public ResponseEntity<Collection<DownloadFileDTO>> findAllFiles() {
+        return ResponseEntity.ok(fileService.findAllFiles());
+    }
+
+    @GetMapping("/api/download/{filename}")
+    public ResponseEntity<InputStreamResource> downloadFile(@PathVariable("filename") String filename) throws IOException {
+        FileEntity file = fileService.download(filename);
+        InputStream stream = new ByteArrayInputStream(file.getContent());
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(new InputStreamResource(stream));
+    }
+
+    @Deprecated(since = "Not using Thymeleaf")
     @PostMapping("/createFile")
     public String uploadFile(CreateFileDTO file, RedirectAttributes attributes) {
         if (file.getContent() == null || file.getContent().isEmpty()) {
@@ -39,6 +57,7 @@ public class FileController {
         return "redirect:/";
     }
 
+    @Deprecated(since = "Not using Thymeleaf")
     @GetMapping("/downloadFile")
     public String downloadFile(DownloadFileDTO fileDTO, RedirectAttributes attributes, HttpServletResponse response) throws IOException {
         FileEntity file = fileService.download(fileDTO.getName());
@@ -54,11 +73,4 @@ public class FileController {
 
         return "redirect:/";
     }
-
-//    @GetMapping(value = "/listAllFiles", produces = MediaType.TEXT_HTML_VALUE)
-//    public String listAllFiles(DownloadFileDTO fileDTO, RedirectAttributes attributes, HttpServletResponse response) {
-//        Collection<FileEntity> list =  fileService.getAllFiles();
-//
-//        return list.toString();
-//    }
 }
