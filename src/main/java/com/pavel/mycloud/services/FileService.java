@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 @Service
 public class FileService {
@@ -41,10 +40,8 @@ public class FileService {
     public Collection<DownloadFileDTO> findAllFiles() {
         Collection<DownloadFileDTO> downloadFileDTOS = new HashSet<>();
 
-        for (FileEntity file: fileRepository.findAll()) {
-            DownloadFileDTO fileDTO = new DownloadFileDTO();
-            fileDTO.setName(file.getName());
-            downloadFileDTOS.add(fileDTO);
+        for (FileEntity file : fileRepository.findAll()) {
+            downloadFileDTOS.add(new DownloadFileDTO(file));
         }
         return downloadFileDTOS;
     }

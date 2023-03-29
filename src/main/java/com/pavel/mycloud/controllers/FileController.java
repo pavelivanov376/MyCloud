@@ -42,6 +42,17 @@ public class FileController {
                 .body(new InputStreamResource(stream));
     }
 
+    @PostMapping("/upload") //    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<String> uploadFile(CreateFileDTO file) throws IOException {
+        if (file.getContent() == null || file.getContent().isEmpty()) {
+            return ResponseEntity.badRequest().body("Empty File cannot be upload");
+        }
+
+        fileService.upload(file);
+        return ResponseEntity.ok()
+                .body("File uploaded");
+    }
+
     @Deprecated(since = "Not using Thymeleaf")
     @PostMapping("/createFile")
     public String uploadFile(CreateFileDTO file, RedirectAttributes attributes) {

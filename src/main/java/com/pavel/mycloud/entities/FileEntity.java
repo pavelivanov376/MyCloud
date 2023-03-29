@@ -37,4 +37,5 @@ public class FileEntity extends BaseFileEntity {
     public void setContent(byte[] content) {
         this.content = content;
     }
+
 }

@@ -1,38 +1,43 @@
-let loadBooksBtn = document.getElementById('loadBooks')
+let loadFilesBtn = document.getElementById('loadFiles')
 
-loadBooksBtn.addEventListener('click', onLoadBooks);
+loadFilesBtn.addEventListener('click', onLoad);
 
-function onLoadBooks(event) {
+function onLoad(event) {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow'
     };
 
-    let authorsContainer = document.getElementById('authors-container')
-    authorsContainer.innerHTML = ''
+    let filesContainer = document.getElementById('files-container')
+    filesContainer.innerHTML = ''
 
-    fetch("http://localhost:8080/api/books/", requestOptions)
+    fetch("http://localhost:80/api/files/", requestOptions)
         .then(response => response.json())
-        .then(json => json.forEach(book => {
+        .then(json => json.forEach(file => {
             // here we will create some elements and add them to the table.
             let row = document.createElement('tr')
 
-            let titleCol = document.createElement('td')
-            let authorCol = document.createElement('td')
-            let isbnCol = document.createElement('td')
-            let actionCol = document.createElement('td')
+            let nameCol = document.createElement('td')
+            let pathCol = document.createElement('td')
+            let ownerCol = document.createElement('td')
+            let typeCol = document.createElement('td')
+            let dateCol = document.createElement('td')
 
-            titleCol.textContent = book.title
-            authorCol.textContent = book.author.name
-            isbnCol.textContent = book.isbn
+            nameCol.textContent = file.name
+            pathCol.textContent = file.parentFolder
+            ownerCol.textContent = file.owner
+            typeCol.textContent = file.type
+            dateCol.textContent = file.creationDate
 
             // add the columns to the parent row
-            row.appendChild(titleCol)
-            row.appendChild(authorCol)
-            row.appendChild(isbnCol)
-            row.appendChild(actionCol)
+            row.appendChild(nameCol)
+            row.appendChild(pathCol)
+            row.appendChild(ownerCol)
+            row.appendChild(typeCol)
+            row.appendChild(dateCol)
 
-            authorsContainer.appendChild(row);
+            filesContainer.appendChild(row);
         }))
         .catch(error => console.log('error', error));
 }
+
