@@ -41,3 +41,27 @@ function onLoad(event) {
         .catch(error => console.log('error', error));
 }
 
+//=========== Upload ==============//
+
+let uploadFileBtn = document.getElementById('uploadFile')
+
+uploadFileBtn.addEventListener('click', onUpload);
+
+var input = document.querySelector('input[type="file"]')
+let fullPath = document.getElementById('path')
+
+var data = new FormData()
+data.append('content', input.files[0])
+data.append('fullPath', fullPath)
+
+function onUpload(event) {
+    var requestOptions = {
+        method: 'POST',
+        redirect: 'follow',
+        body: data
+    };
+
+    fetch("http://localhost:80/api/upload/", requestOptions)
+        .then(alert("File was uploaded"))
+        .catch(alert("ERROR! File wasn't uploaded"));
+}
