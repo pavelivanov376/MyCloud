@@ -33,6 +33,7 @@ public class FileController {
         return ResponseEntity.ok(fileService.findAllFiles());
     }
 
+    //TODO Create a new endpoint where we return not stream directly but dto, which is built in the service so here we just receive it
     @GetMapping("/api/download/{filename}")
     public ResponseEntity<InputStreamResource> downloadFile(@PathVariable("filename") String filename) throws IOException {
         FileEntity file = fileService.download(filename);
@@ -42,7 +43,7 @@ public class FileController {
                 .body(new InputStreamResource(stream));
     }
 
-    @PostMapping("/upload") //    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+    @PostMapping("/api/upload") //    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile multipartFile) throws IOException {
     public ResponseEntity<String> uploadFile(CreateFileDTO file) throws IOException {
         if (file.getContent() == null || file.getContent().isEmpty()) {
             return ResponseEntity.badRequest().body("Empty File cannot be upload");
@@ -51,37 +52,5 @@ public class FileController {
         fileService.upload(file);
         return ResponseEntity.ok()
                 .body("File uploaded");
-    }
-
-    @Deprecated(since = "Not using Thymeleaf")
-    @PostMapping("/createFile")
-    public String uploadFile(CreateFileDTO file, RedirectAttributes attributes) {
-        if (file.getContent() == null || file.getContent().isEmpty()) {
-            attributes.addFlashAttribute("messageCreateFile", "Unable to upload the file");
-            return "redirect:/";
-        }
-
-        fileService.upload(file);
-
-        attributes.addFlashAttribute("messageCreateFile", "Successfully uploaded");
-
-        return "redirect:/";
-    }
-
-    @Deprecated(since = "Not using Thymeleaf")
-    @GetMapping("/downloadFile")
-    public String downloadFile(DownloadFileDTO fileDTO, RedirectAttributes attributes, HttpServletResponse response) throws IOException {
-        FileEntity file = fileService.download(fileDTO.getName());
-        response.setContentType("application/octet-stream");
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename = " + file.getName();
-        response.setHeader(headerKey, headerValue);
-        ServletOutputStream outputStream = response.getOutputStream();
-        outputStream.write(file.getContent());
-        outputStream.close();
-
-        attributes.addFlashAttribute("messageDownload", "Successfully downloaded");
-
-        return "redirect:/";
     }
 }
