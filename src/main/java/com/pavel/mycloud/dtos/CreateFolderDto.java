@@ -2,6 +2,16 @@ package com.pavel.mycloud.dtos;
 
 public class CreateFolderDto {
     private String fullPath;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 
     public String getFullPath() {
         return fullPath;
@@ -11,7 +21,7 @@ public class CreateFolderDto {
         return fullPath.substring(0, fullPath.lastIndexOf('/'));
     }
 
-    public String getFolderName() {
+    public String getParentFolderName() {
         return fullPath.substring(fullPath.lastIndexOf('/') + 1);
     }
 

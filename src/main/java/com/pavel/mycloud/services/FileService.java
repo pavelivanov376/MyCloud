@@ -1,7 +1,7 @@
 package com.pavel.mycloud.services;
 
 import com.pavel.mycloud.dtos.CreateFileDTO;
-import com.pavel.mycloud.dtos.DownloadFileDTO;
+import com.pavel.mycloud.dtos.BaseEntityDTO;
 import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.factories.FileEntityFactory;
 import com.pavel.mycloud.repositories.FileRepository;
@@ -37,11 +37,11 @@ public class FileService {
         return file;
     }
 
-    public Collection<DownloadFileDTO> findAllFiles() {
-        Collection<DownloadFileDTO> downloadFileDTOS = new HashSet<>();
+    public Collection<BaseEntityDTO> findAllFiles() {
+        Collection<BaseEntityDTO> downloadFileDTOS = new HashSet<>();
 
         for (FileEntity file : fileRepository.findAll()) {
-            downloadFileDTOS.add(new DownloadFileDTO(file));
+            downloadFileDTOS.add(new BaseEntityDTO(file));
         }
         return downloadFileDTOS;
     }

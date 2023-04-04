@@ -4,7 +4,7 @@ import com.pavel.mycloud.entities.FileEntity;
 
 import java.time.LocalDateTime;
 
-public class DownloadFileDTO {
+public class BaseEntityDTO {
 
     private String name;
     private String parentFolder;
@@ -12,7 +12,7 @@ public class DownloadFileDTO {
     private String type;
     private LocalDateTime creationDate;
 
-    public DownloadFileDTO(FileEntity file) {
+    public BaseEntityDTO(FileEntity file) {
         this.name = file.getName();
         this.parentFolder = file.getParentFolder() != null ? file.getParentFolder().getName() : null;
         this.owner = file.getOwner();

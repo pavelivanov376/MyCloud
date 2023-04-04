@@ -1,7 +1,7 @@
 package com.pavel.mycloud.controllers;
 
 import com.pavel.mycloud.dtos.CreateFileDTO;
-import com.pavel.mycloud.dtos.DownloadFileDTO;
+import com.pavel.mycloud.dtos.BaseEntityDTO;
 import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.services.FileService;
 import org.springframework.core.io.InputStreamResource;
@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +26,7 @@ public class FileController {
     }
 
     @GetMapping("/api/files")
-    public ResponseEntity<Collection<DownloadFileDTO>> findAllFiles() {
+    public ResponseEntity<Collection<BaseEntityDTO>> findAllFiles() {
         return ResponseEntity.ok(fileService.findAllFiles());
     }
 

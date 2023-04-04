@@ -1,11 +1,14 @@
 package com.pavel.mycloud.services;
 
+import com.pavel.mycloud.dtos.BaseEntityDTO;
 import com.pavel.mycloud.dtos.CreateFolderDto;
 import com.pavel.mycloud.entities.FolderEntity;
 import com.pavel.mycloud.factories.FolderEntityFactory;
 import com.pavel.mycloud.helpers.FolderFinder;
 import com.pavel.mycloud.repositories.FolderRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 @Service
 public class FolderService {
@@ -20,12 +23,16 @@ public class FolderService {
     }
 
     public FolderEntity findByPath(String path) {
-
         return folderFinder.find(path);
     }
 
     public void create(CreateFolderDto folder) {
         FolderEntity folderEntity = folderEntityFactory.createFolderEntity(folder);
         folderRepository.save(folderEntity);
+    }
+
+    public Collection<BaseEntityDTO> getContent() {
+        //TODO Return everyting that has this folder as a parent folder
+        return null;
     }
 }

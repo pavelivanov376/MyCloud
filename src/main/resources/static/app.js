@@ -15,23 +15,24 @@ function onLoad(event) {
     fetch("http://localhost:80/api/files/", requestOptions)
         .then(response => response.json())
         .then(json => json.forEach(file => {
-            // here we will create some elements and add them to the table.
             let row = document.createElement('tr')
 
             let nameCol = document.createElement('td')
-            nameCol.setAttribute("onclick", "tdclick(event);");
             let pathCol = document.createElement('td')
             let ownerCol = document.createElement('td')
             let typeCol = document.createElement('td')
             let dateCol = document.createElement('td')
 
-            nameCol.textContent = file.name
             pathCol.textContent = file.parentFolder
             ownerCol.textContent = file.owner
             typeCol.textContent = file.type
             dateCol.textContent = file.creationDate
 
-            // add the columns to the parent row
+            let buttonDownload = document.createElement('a')
+            buttonDownload.textContent = file.name
+            buttonDownload.setAttribute("href", "http://localhost:80/api/download/" + file.name);
+            nameCol.appendChild(buttonDownload)
+
             row.appendChild(nameCol)
             row.appendChild(pathCol)
             row.appendChild(ownerCol)
@@ -67,26 +68,26 @@ data.append('fullPath', fullPath)
         .catch(error => console.log('error', error));
 }
 //=========== Download ==============//
-function onDownload(event) {
-let fileName = event.srcElement.childNodes[0].nodeValue
-    var requestOptions = {
-               method: 'GET',
-               redirect: 'follow'
-       }
-
-       let url = "http://localhost:80/api/download/" + fileName
-       fetch(url, requestOptions)//TODO Directly add the attribute download and href to the listing method and remove this OnDownload()
-           .then(alert("File was downloaded"))
-           .then(res => console.log(res))
-           .then(res => console.log(res.content))
-           .then(res => res.blob())
-           .then(data => {
-             var a = document.createElement("a");
-             a.href = window.URL.createObjectURL(data);
-             a.download = "FILENAME";
-             a.click();
-           .catch(error => console.log('error', error));
-}
+//function onDownload(event) {
+//let fileName = event.srcElement.childNodes[0].nodeValue
+//    var requestOptions = {
+//               method: 'GET',
+//               redirect: 'follow'
+//       }
+//
+//       let url = "http://localhost:80/api/download/" + fileName
+//       fetch(url, requestOptions)//TODO Directly add the attribute download and href to the listing method and remove this OnDownload()
+//           .then(alert("File was downloaded"))
+//           .then(res => console.log(res))
+//           .then(res => console.log(res.content))
+//           .then(res => res.blob())
+//           .then(data => {
+//             var a = document.createElement("a");
+//             a.href = window.URL.createObjectURL(data);
+//             a.download = "FILENAME";
+//             a.click();
+//           .catch(error => console.log('error', error));
+//}
 
 //==============TODO on hover make blue color
 

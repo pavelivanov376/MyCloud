@@ -13,12 +13,8 @@ public class HomeController {
         this.fileService = fileService;
     }
 
-
     @GetMapping("/")
     public String home(RedirectAttributes attributes) {
-//        Collection<FileEntity> list = fileService.getAllFiles();
-//        attributes.addFlashAttribute("listOfAllFiles", list.toString());
-
         return "files/index.html";
     }
 }
