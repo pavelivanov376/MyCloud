@@ -67,37 +67,27 @@ data.append('fullPath', fullPath)
         .then(alert("File was uploaded"))
         .catch(error => console.log('error', error));
 }
-//=========== Download ==============//
-//function onDownload(event) {
-//let fileName = event.srcElement.childNodes[0].nodeValue
-//    var requestOptions = {
-//               method: 'GET',
-//               redirect: 'follow'
-//       }
-//
-//       let url = "http://localhost:80/api/download/" + fileName
-//       fetch(url, requestOptions)//TODO Directly add the attribute download and href to the listing method and remove this OnDownload()
-//           .then(alert("File was downloaded"))
-//           .then(res => console.log(res))
-//           .then(res => console.log(res.content))
-//           .then(res => res.blob())
-//           .then(data => {
-//             var a = document.createElement("a");
-//             a.href = window.URL.createObjectURL(data);
-//             a.download = "FILENAME";
-//             a.click();
-//           .catch(error => console.log('error', error));
-//}
 
-//==============TODO on hover make blue color
+//============== Create Folder
+//TODO Create folder fro given name and current folder we are into, starting from the root
+let uploadFileBtn = document.getElementById('createFolder')
+uploadFileBtn.addEventListener('click', onUpload);
 
-//==============OnClick
-function tdclick(event){
+function onUpload(event) {
+var data = new FormData()
+var input = document.querySelector('input[type="file"]')
+let fullPath = document.getElementById('path')
 
-    onDownload(event)
+data.append('content', input.files[0])
+data.append('fullPath', fullPath)
 
+    var requestOptions = {
+        method: 'POST',
+        redirect: 'follow',
+        body: data
+    };
 
-    console.log('td clicked');
-    console.log(event.srcElement.childNodes[0].nodeValue);
-    event.stopPropagation()
-};
+    fetch("http://localhost:80/api/upload/", requestOptions)
+        .then(alert("File was uploaded"))
+        .catch(error => console.log('error', error));
+}

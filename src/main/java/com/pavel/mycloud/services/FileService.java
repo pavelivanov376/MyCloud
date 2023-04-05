@@ -38,11 +38,19 @@ public class FileService {
     }
 
     public Collection<BaseEntityDTO> findAllFiles() {
-        Collection<BaseEntityDTO> downloadFileDTOS = new HashSet<>();
+        Collection<BaseEntityDTO> fileDTOS = new HashSet<>();
 
         for (FileEntity file : fileRepository.findAll()) {
-            downloadFileDTOS.add(new BaseEntityDTO(file));
+            fileDTOS.add(new BaseEntityDTO(file));
         }
-        return downloadFileDTOS;
+        return fileDTOS;
+    }
+    public Collection<BaseEntityDTO> findAllByParentFolder() {
+        Collection<BaseEntityDTO> folderDTOS = new HashSet<>();
+
+        for (FileEntity file : fileRepository.findAll()) {
+            folderDTOS.add(new BaseEntityDTO(file));
+        }
+        return folderDTOS;
     }
 }

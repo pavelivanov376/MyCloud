@@ -1,5 +1,6 @@
 package com.pavel.mycloud.dtos;
 
+import com.pavel.mycloud.entities.BaseFileEntity;
 import com.pavel.mycloud.entities.FileEntity;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,13 @@ public class BaseEntityDTO {
         this.parentFolder = file.getParentFolder() != null ? file.getParentFolder().getName() : null;
         this.owner = file.getOwner();
         this.type = file.getType();
+        this.creationDate = file.getCreationDate();
+    }
+
+    public BaseEntityDTO(BaseFileEntity file, String parentFolder) {
+        this.name = file.getName();
+        this.parentFolder = parentFolder;//file.getParentFolder() != null ? file.getParentFolder().getName() : null;
+        this.owner = file.getOwner();
         this.creationDate = file.getCreationDate();
     }
 

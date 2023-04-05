@@ -1,6 +1,6 @@
 package com.pavel.mycloud.dtos;
 
-public class CreateFolderDto {
+public class FolderDto {
     private String fullPath;
     private String name;
 
