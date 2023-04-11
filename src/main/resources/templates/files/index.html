@@ -23,7 +23,23 @@
     <input type="file" id="file">
     <input type="title" id="path" placeholder="Enter Full Path...">
 </form>
-<button id="uploadFile">Upload</button><br>
+<button id="uploadFile">Upload</button><br><br><br>
+
+<div>
+    <p id="currentFolder">Current Directory: </p>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Owner</th>
+            <th>Type</th>
+            <th>Upload Date</th>
+        </tr>
+        </thead>
+        <tbody  id="folderContentContainer"></tbody>
+    </table>
+</div>
+
 
 <form>
     <h3>Create folder</h3>

@@ -2,6 +2,7 @@ package com.pavel.mycloud.dtos;
 
 import com.pavel.mycloud.entities.BaseFileEntity;
 import com.pavel.mycloud.entities.FileEntity;
+import com.pavel.mycloud.entities.FolderEntity;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +27,9 @@ public class BaseEntityDTO {
         this.parentFolder = parentFolder;//file.getParentFolder() != null ? file.getParentFolder().getName() : null;
         this.owner = file.getOwner();
         this.creationDate = file.getCreationDate();
+        if (file instanceof FolderEntity) {
+            this.type = "directory";
+        }
     }
 
     public LocalDateTime getCreationDate() {
