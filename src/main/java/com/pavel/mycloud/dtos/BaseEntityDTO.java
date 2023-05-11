@@ -1,6 +1,6 @@
 package com.pavel.mycloud.dtos;
 
-import com.pavel.mycloud.entities.BaseFileEntity;
+import com.pavel.mycloud.entities.CompositeFileEntity;
 import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.entities.FolderEntity;
 
@@ -22,7 +22,7 @@ public class BaseEntityDTO {
         this.creationDate = file.getCreationDate();
     }
 
-    public BaseEntityDTO(BaseFileEntity file, String parentFolder) {
+    public BaseEntityDTO(CompositeFileEntity file, String parentFolder) {
         this.name = file.getName();
         this.parentFolder = parentFolder;//file.getParentFolder() != null ? file.getParentFolder().getName() : null;
         this.owner = file.getOwner();

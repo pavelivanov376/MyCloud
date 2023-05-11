@@ -3,7 +3,7 @@ package com.pavel.mycloud.entities;
 import javax.persistence.*;
 
 @Entity(name = "files")
-public class FileEntity extends BaseFileEntity {
+public class FileEntity extends CompositeFileEntity {
 
     @ManyToOne
     private FolderEntity parentFolder;

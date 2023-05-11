@@ -2,7 +2,7 @@ package com.pavel.mycloud.services;
 
 import com.pavel.mycloud.dtos.BaseEntityDTO;
 import com.pavel.mycloud.dtos.FolderDto;
-import com.pavel.mycloud.entities.BaseFileEntity;
+import com.pavel.mycloud.entities.CompositeFileEntity;
 import com.pavel.mycloud.entities.FolderEntity;
 import com.pavel.mycloud.factories.FolderEntityFactory;
 import com.pavel.mycloud.helpers.FolderFinder;
@@ -39,7 +39,7 @@ public class FolderService {
     }
 
     public Collection<BaseEntityDTO> findAllContentByParentFolder(String parenFolderId) {        //TODO Return everyting that has this folder as a parent folder
-        Collection<BaseFileEntity> content = new ArrayList<>();
+        Collection<CompositeFileEntity> content = new ArrayList<>();
 
         content.addAll(folderRepository.findAllByParentFolderId(parenFolderId));
         content.addAll(fileRepository.findAllByParentFolderId(parenFolderId));
