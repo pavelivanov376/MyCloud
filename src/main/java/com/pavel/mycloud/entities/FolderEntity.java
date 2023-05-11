@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity(name = "folders")
-public class FolderEntity extends BaseFileEntity {
+public class FolderEntity extends CompositeFileEntity {
     @ManyToOne
     private FolderEntity parentFolder;
     @OneToMany

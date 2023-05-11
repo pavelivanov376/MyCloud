@@ -1,9 +1,8 @@
 package com.pavel.mycloud.factories;
 
-import com.pavel.mycloud.dtos.CreateFolderDto;
+import com.pavel.mycloud.dtos.FolderDto;
 import com.pavel.mycloud.entities.FolderEntity;
 import com.pavel.mycloud.helpers.FolderFinder;
-import com.pavel.mycloud.services.FolderService;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,10 +14,10 @@ public class FolderEntityFactory {
         this.folderFinder = folderFinder;
     }
 
-    public FolderEntity createFolderEntity(CreateFolderDto folderDto) {
+    public FolderEntity createFolderEntity(FolderDto folderDto) {
         FolderEntity folderEntity = new FolderEntity();
 
-        folderEntity.setName(folderDto.getFullPath());
+        folderEntity.setName(folderDto.getName());
         folderEntity.setOwner("Pavel");
 
         FolderEntity parentFolder = folderFinder.find(folderDto.getFullPath());

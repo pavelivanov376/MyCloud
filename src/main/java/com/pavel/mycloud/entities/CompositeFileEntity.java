@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public abstract class BaseFileEntity {
+public abstract class CompositeFileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,21 +18,13 @@ public abstract class BaseFileEntity {
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
-    public BaseFileEntity() {
+    public CompositeFileEntity() {
     }
 
-    public BaseFileEntity(String name, String owner, LocalDateTime creationDate) {
+    public CompositeFileEntity(String name, String owner, LocalDateTime creationDate) {
         this.name = name;
         this.owner = owner;
         this.creationDate = creationDate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -53,6 +45,14 @@ public abstract class BaseFileEntity {
 
     public LocalDateTime getCreationDate() {
         return creationDate;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setCreationDate(LocalDateTime creationDate) {

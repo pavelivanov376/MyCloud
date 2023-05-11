@@ -1,9 +1,8 @@
 package com.pavel.mycloud.dtos;
 
-public class DownloadFileDTO {
-
+public class UserDTO {
     private String name;
-    private String fullPath;
+    private String password;
 
     public String getName() {
         return name;
@@ -13,13 +12,11 @@ public class DownloadFileDTO {
         this.name = name;
     }
 
-
-    public String getFullPath() {
-        return fullPath;
+    public String getPassword() {
+        return password;
     }
 
-    public void setFullPath(String fullPath) {
-        this.fullPath = fullPath;
+    public void setPassword(String password) {
+        this.password = password;
     }
-
 }

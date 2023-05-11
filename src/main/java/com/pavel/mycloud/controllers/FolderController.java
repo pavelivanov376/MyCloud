@@ -1,12 +1,16 @@
 package com.pavel.mycloud.controllers;
 
-import com.pavel.mycloud.dtos.CreateFileDTO;
-import com.pavel.mycloud.dtos.CreateFolderDto;
+import com.pavel.mycloud.dtos.FolderDto;
+import com.pavel.mycloud.dtos.BaseEntityDTO;
 import com.pavel.mycloud.services.FolderService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Controller
 public class FolderController {
@@ -16,17 +20,15 @@ public class FolderController {
         this.folderService = folderService;
     }
 
-    @PostMapping("/createFolder")
-    public String uploadFile(CreateFolderDto folder, RedirectAttributes attributes) {
-        if (folder == null || folder.getFullPath() == null || folder.getFullPath().isEmpty()) {
-            attributes.addFlashAttribute("messageCreateFolder", "Unable to create the folder");
-            return "redirect:/";
-        }
+    @GetMapping("/api/folder/{id}")
+    public ResponseEntity<Collection<BaseEntityDTO>> getFolderContent(@PathVariable("id") String parenFolderId) {
+        return ResponseEntity.ok(folderService.findAllContentByParentFolder(parenFolderId));
+    }
 
+    @PostMapping("/api/folder/create")
+    public ResponseEntity<String> createFolder(FolderDto folder) {
         folderService.create(folder);
 
-        attributes.addFlashAttribute("messageCreateFolder", "Successfully uploaded");
-
-        return "redirect:/";
+        return ResponseEntity.ok("Folder created");
     }
 }
