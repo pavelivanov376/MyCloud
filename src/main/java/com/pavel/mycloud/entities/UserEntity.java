@@ -14,8 +14,19 @@ public class UserEntity {
 
     @Column(name = "password")
     private String password;
-
+    @Column(name = "role")
     private UserRole role;
+    @Column(name = "home_folder_id")
+    private Long homeFolderID;
+
+    public Long getHomeFolderID() {
+        return homeFolderID;
+    }
+
+    public UserEntity setHomeFolderID(Long homeFolderID) {
+        this.homeFolderID = homeFolderID;
+        return this;
+    }
 
     public UserRole getRole() {
         return role;

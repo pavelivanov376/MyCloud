@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity(name = "files")
 public class FileEntity extends CompositeFileEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private FolderEntity parentFolder;
 
     @Column(name = "type")
