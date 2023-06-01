@@ -16,15 +16,16 @@ public class UserEntity {
     private String password;
     @Column(name = "role")
     private UserRole role;
-    @Column(name = "home_folder_id")
-    private Long homeFolderID;
 
-    public Long getHomeFolderID() {
-        return homeFolderID;
+    @Column(name = "home_folder_uuid")
+    private String homeFolderUuid;
+
+    public String getHomeFolderUuid() {
+        return homeFolderUuid;
     }
 
-    public UserEntity setHomeFolderID(Long homeFolderID) {
-        this.homeFolderID = homeFolderID;
+    public UserEntity setHomeFolderUuid(String homeFolderUuid) {
+        this.homeFolderUuid = homeFolderUuid;
         return this;
     }
 

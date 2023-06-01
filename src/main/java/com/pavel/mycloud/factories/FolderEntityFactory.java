@@ -5,6 +5,8 @@ import com.pavel.mycloud.entities.FolderEntity;
 import com.pavel.mycloud.helpers.FolderFinder;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class FolderEntityFactory {
     private final FolderFinder folderFinder;
@@ -22,6 +24,7 @@ public class FolderEntityFactory {
 
         FolderEntity parentFolder = folderFinder.find(folderDto.getFullPath());
         folderEntity.setParentFolder(parentFolder);
+        folderEntity.setUuid(UUID.randomUUID().toString());
 
         return folderEntity;
     }

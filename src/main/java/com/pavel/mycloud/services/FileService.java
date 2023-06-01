@@ -27,7 +27,7 @@ public class FileService {
         FileEntity fileEntity = fileFactory.createFileEntity(fileDTO);
 
         fileRepository.save(fileEntity);
-        storageService.uploadFile(fileDTO.getContent());
+        storageService.uploadFile(fileDTO);
     }
 
     public FileEntity download(String name) {
@@ -52,5 +52,12 @@ public class FileService {
             folderDTOS.add(new BaseEntityDTO(file));
         }
         return folderDTOS;
+    }
+
+    public FileEntity findByUuid(String uuid) {
+        FileEntity file = fileRepository.findByUuid(uuid);
+        byte[] content = storageService.downloadFile(uuid);
+        file.setContent(content);
+        return file;
     }
 }

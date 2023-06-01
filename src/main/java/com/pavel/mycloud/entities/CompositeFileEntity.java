@@ -9,6 +9,8 @@ public abstract class CompositeFileEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "uuid", nullable = false, unique = true)
+    private String uuid;
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -47,6 +49,10 @@ public abstract class CompositeFileEntity {
         return creationDate;
     }
 
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
     public Long getId() {
         return id;
     }
@@ -55,7 +61,12 @@ public abstract class CompositeFileEntity {
         this.id = id;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
+    public String getUuid() {
+        return uuid;
+    }
+
+    public CompositeFileEntity setUuid(String uuid) {
+        this.uuid = uuid;
+        return this;
     }
 }

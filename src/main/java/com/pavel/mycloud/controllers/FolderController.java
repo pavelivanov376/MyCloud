@@ -25,16 +25,15 @@ public class FolderController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/api/folder/{id}")
-    public ResponseEntity<Collection<BaseEntityDTO>> getFolderContent(@PathVariable("id") Long folderId) {
-//        return ResponseEntity.ok(folderService.findAllContentByParentFolder(folderId));
-        return ResponseEntity.ok(folderService.listById(folderId));
+    @GetMapping("/api/folder/{uuid}")
+    public ResponseEntity<Collection<BaseEntityDTO>> getFolderContent(@PathVariable("uuid") String uuid) {
+        return ResponseEntity.ok(folderService.listByUuid(uuid));
     }
 
     @GetMapping("/api/home/id")
     public ResponseEntity<String> getHomeFolderContent(Principal principal) {
-        Long homeFolderID = userRepository.findByName(principal.getName()).get().getHomeFolderID();
-        return ResponseEntity.ok(homeFolderID.toString());
+        String homeFolderID = userRepository.findByName(principal.getName()).get().getHomeFolderUuid();
+        return ResponseEntity.ok("homeFolderID");
     }
 
     @PostMapping("/api/folder/create")

@@ -9,4 +9,6 @@ public interface FileRepository extends JpaRepository<FileEntity, Long> {
     FileEntity findByName(String name);
 
     Collection<FileEntity> findAllByParentFolderId(String parenFolderId);
+
+    FileEntity findByUuid(String uuid);
 }

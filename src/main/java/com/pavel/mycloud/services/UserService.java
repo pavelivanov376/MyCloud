@@ -29,12 +29,12 @@ public class UserService {
     }
 
     public void registerAndLogin(UserDTO userDTO) {
-        Long homeFolderId = folderService.createHomeFolderForUser(userDTO);
+        String homeFolderId = folderService.createHomeFolderForUser(userDTO);
 
         UserEntity newUser = new UserEntity()
                 .setName(userDTO.getName())
                 .setRole(UserRole.NORMAL)
-                .setHomeFolderID(homeFolderId)
+                .setHomeFolderUuid(homeFolderId)
                 .setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         userRepository.save(newUser);

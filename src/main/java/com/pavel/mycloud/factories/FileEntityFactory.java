@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Component
 public class FileEntityFactory {
@@ -36,8 +37,9 @@ public class FileEntityFactory {
         fileEntity.setOwner("Pavel");
         fileEntity.setType(extractFileType(filename));
         fileEntity.setCreationDate(LocalDateTime.now());
+        fileEntity.setUuid(UUID.randomUUID().toString());
 
-        FolderEntity parentFolder = folderService.findByPath(fileDTO.getFullPath());
+        FolderEntity parentFolder = folderService.findById(fileDTO.getParentFolderId());//TODO get by parent folder id becaus in full path we pass the parentFolderID
         fileEntity.setParentFolder(parentFolder);
 
         return fileEntity;

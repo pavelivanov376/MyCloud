@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,13 +35,13 @@ public class FolderService {
         return folderFinder.find(path);
     }
 
-    public Long create(FolderDto folder) {
+    public String create(FolderDto folder) {
         FolderEntity folderEntity = folderEntityFactory.createFolderEntity(folder);
         FolderEntity savedFolder = folderRepository.save(folderEntity);
-        return savedFolder.getId();
+        return savedFolder.getUuid();
     }
 
-    public Collection<BaseEntityDTO> findAllContentByParentFolder(String parenFolderId) {        //TODO Return everyting that has this folder as a parent folder
+    public Collection<BaseEntityDTO> findAllContentByParentFolder(String parenFolderId) {
         Collection<CompositeFileEntity> content = new ArrayList<>();
 
         content.addAll(folderRepository.findAllByParentFolderId(parenFolderId));
@@ -50,25 +50,38 @@ public class FolderService {
         return content.stream().map(e -> new BaseEntityDTO(e, parenFolderId)).collect(Collectors.toList());
     }
 
-    public Long createHomeFolderForUser(UserDTO userDTO) {
+    public String createHomeFolderForUser(UserDTO userDTO) {
         FolderDto folderDto = new FolderDto()
-        .setName(userDTO.getName())
-        .setFullPath("/root")
-        .setOwner(userDTO.getName());
+                .setName(userDTO.getName())
+                .setFullPath("/root")
+                .setOwner(userDTO.getName());
 
-        Long id = create(folderDto);
-        //  String stringId = id.toString();//TODO Refactor when start using UUID
-
-        return id;
+        return create(folderDto);
     }
 
-    public Collection<BaseEntityDTO> listById(Long folderId) {
+    public Collection<BaseEntityDTO> listByUuid(String uuid) {
         Collection<CompositeFileEntity> content = new ArrayList<>();
 
-        FolderEntity folderEntity = folderRepository.findById(folderId).get();
+        FolderEntity folderEntity = folderRepository.findByUuid(uuid);
         content.addAll(folderEntity.getContainedFolders());
         content.addAll(folderEntity.getContainedFiles());
 
-        return content.stream().map(e -> new BaseEntityDTO(e, folderId.toString())).collect(Collectors.toList());
+        List<BaseEntityDTO> result = new ArrayList<>();
+        if (!isMainRootDirectory(folderEntity)) {
+            BaseEntityDTO parent = new BaseEntityDTO(folderEntity, uuid).setName("/..");
+            result.add(parent);
+        }
+        result.addAll(content.stream().map(e -> new BaseEntityDTO(e, uuid)).collect(Collectors.toList()));
+
+        return result;
+    }
+
+    public FolderEntity findById(String id) {
+        long folderId = Long.parseLong(id);
+        return folderRepository.findById(folderId).get();
+    }
+
+    private boolean isMainRootDirectory(FolderEntity folderEntity) {
+        return folderEntity.getUuid().equals("10000000-0000-0000-0000-000000000001") || folderEntity.getParentFolder().getId().equals("10000000-0000-0000-0000-000000000001");
     }
 }
