@@ -68,7 +68,7 @@ public class FolderService {
 
         List<BaseEntityDTO> result = new ArrayList<>();
         if (!isMainRootDirectory(folderEntity)) {
-            BaseEntityDTO parent = new BaseEntityDTO(folderEntity, uuid).setName("/..");
+            BaseEntityDTO parent = new BaseEntityDTO(folderEntity.getParentFolder(), uuid).setName("/..");
             result.add(parent);
         }
         result.addAll(content.stream().map(e -> new BaseEntityDTO(e, uuid)).collect(Collectors.toList()));
@@ -82,6 +82,6 @@ public class FolderService {
     }
 
     private boolean isMainRootDirectory(FolderEntity folderEntity) {
-        return folderEntity.getUuid().equals("10000000-0000-0000-0000-000000000001") || folderEntity.getParentFolder().getId().equals("10000000-0000-0000-0000-000000000001");
+        return folderEntity.getParentFolder().getUuid().equals("10000000-0000-0000-0000-000000000001");
     }
 }

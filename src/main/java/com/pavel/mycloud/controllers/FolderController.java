@@ -33,7 +33,7 @@ public class FolderController {
     @GetMapping("/api/home/id")
     public ResponseEntity<String> getHomeFolderContent(Principal principal) {
         String homeFolderID = userRepository.findByName(principal.getName()).get().getHomeFolderUuid();
-        return ResponseEntity.ok("homeFolderID");
+        return ResponseEntity.ok(homeFolderID);
     }
 
     @PostMapping("/api/folder/create")

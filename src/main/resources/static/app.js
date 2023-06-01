@@ -1,7 +1,7 @@
 //===========OnPageLoad================//
 //Run once when page initially loaded for the root folder
 let homeDirectoryID;
-let currentFolderName = "/home/"
+let currentFolderName = "/home"
 let currentFolderId;
 
 window.onload = function () {
@@ -11,9 +11,7 @@ window.onload = function () {
     };
     //Get current user home folder id
     fetch("http://localhost:80/api/home/id/", requestOptions)
-        .then(response => console.log(response))
-        .then(response => console.log("AS JSON"+response.innerHTML()))
-        .then(response => response.json())
+        .then(response => response.text())
         .then(id => {
             homeDirectoryID = id;
             currentFolderId = id;
@@ -28,6 +26,7 @@ function onEnterFolder(folderIndex) {
     console.log("Entering folder" + folderIndex)
 
     let currentFolderElement = document.getElementById('currentFolder')
+
     currentFolderElement.innerHTML = 'Current Directory: ' + currentFolderName
 
     let filesContainer = document.getElementById('folderContentContainer')
@@ -84,7 +83,11 @@ function onOpenFolder(event) {
     let uuid = event.currentTarget.id.substring(5);
     let name = event.currentTarget.innerHTML;
 
-    currentFolderName += name;
+    if (name === '/..') {
+        currentFolderName = currentFolderName.substring(0, currentFolderName.lastIndexOf('/'))
+    } else {
+        currentFolderName += name;
+    }
     currentFolderId = uuid;
 
     onEnterFolder(uuid);
