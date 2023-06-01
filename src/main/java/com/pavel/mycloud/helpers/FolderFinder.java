@@ -14,7 +14,7 @@ public class FolderFinder {
     }
 
     public FolderEntity find(String path) {
-        String folderName = path.substring(path.lastIndexOf('/') + 1);
+        String folderName = path.substring(path.lastIndexOf('/'));
 
         return folderRepository.findByName(folderName);
     }

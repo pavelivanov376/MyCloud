@@ -17,8 +17,8 @@ public class FolderEntityFactory {
     public FolderEntity createFolderEntity(FolderDto folderDto) {
         FolderEntity folderEntity = new FolderEntity();
 
-        folderEntity.setName(folderDto.getName());
-        folderEntity.setOwner("Pavel");
+        folderEntity.setName("/" + folderDto.getName());
+        folderEntity.setOwner(folderDto.getOwner());//TODO Put the actual name of the owner
 
         FolderEntity parentFolder = folderFinder.find(folderDto.getFullPath());
         folderEntity.setParentFolder(parentFolder);

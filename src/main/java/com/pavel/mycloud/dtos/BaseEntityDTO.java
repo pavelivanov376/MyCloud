@@ -14,22 +14,32 @@ public class BaseEntityDTO {
     private String type;
     private LocalDateTime creationDate;
 
+    private String UUID;
+
     public BaseEntityDTO(FileEntity file) {
         this.name = file.getName();
         this.parentFolder = file.getParentFolder() != null ? file.getParentFolder().getName() : null;
         this.owner = file.getOwner();
         this.type = file.getType();
         this.creationDate = file.getCreationDate();
+        this.UUID = file.getId().toString();//TODO Change when start using UUID
     }
 
     public BaseEntityDTO(CompositeFileEntity file, String parentFolder) {
         this.name = file.getName();
-        this.parentFolder = parentFolder;//file.getParentFolder() != null ? file.getParentFolder().getName() : null;
+        this.parentFolder = parentFolder;
         this.owner = file.getOwner();
         this.creationDate = file.getCreationDate();
-        if (file instanceof FolderEntity) {
-            this.type = "directory";
-        }
+        this.type = file instanceof FolderEntity ? "directory" : "file";
+        this.UUID = file.getId().toString();//TODO Change when start using UUID
+    }
+
+    public String getUUID() {
+        return UUID;
+    }
+
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
     }
 
     public LocalDateTime getCreationDate() {

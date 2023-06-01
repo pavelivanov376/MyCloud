@@ -5,12 +5,24 @@ public class FolderDto {
     private String name;
     private String fullPath;
 
+    private String owner;
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public FolderDto setOwner(String owner) {
+        this.owner = owner;
+        return this;
+    }
+
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public FolderDto setName(String name) {
         this.name = name;
+        return this;
     }
 
 
@@ -26,15 +38,17 @@ public class FolderDto {
         return fullPath.substring(fullPath.lastIndexOf('/') + 1);
     }
 
-    public void setFullPath(String fullPath) {
+    public FolderDto setFullPath(String fullPath) {
         this.fullPath = fullPath;
+        return this;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public FolderDto setId(int id) {
         this.id = id;
+        return this;
     }
 }

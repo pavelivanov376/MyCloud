@@ -1,9 +1,6 @@
 package com.pavel.mycloud.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -11,10 +8,10 @@ import java.util.Set;
 public class FolderEntity extends CompositeFileEntity {
     @ManyToOne
     private FolderEntity parentFolder;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_folder_id")
     private Set<FileEntity> containedFiles;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_folder_id")
     private Set<FolderEntity> containedFolders;
 
