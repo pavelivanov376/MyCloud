@@ -31,9 +31,9 @@ public class FileController {
     }
 
     //TODO Create a new endpoint where we return not stream directly but dto, which is built in the service so here we just receive it
-    @GetMapping("/api/download/{filename}")
-    public ResponseEntity<InputStreamResource> downloadFile(@PathVariable("filename") String filename) throws IOException {
-        FileEntity file = fileService.download(filename);
+    @GetMapping("/api/download/{uuid}")
+    public ResponseEntity<InputStreamResource> downloadFile(@PathVariable("uuid") String uuid) throws IOException {
+        FileEntity file = fileService.findByUuid(uuid);
         InputStream stream = new ByteArrayInputStream(file.getContent());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)

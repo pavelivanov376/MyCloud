@@ -5,6 +5,7 @@ import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.entities.FolderEntity;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class BaseEntityDTO {
 
@@ -14,7 +15,7 @@ public class BaseEntityDTO {
     private String type;
     private LocalDateTime creationDate;
 
-    private String UUID;
+    private String uuid;
 
     public BaseEntityDTO(FileEntity file) {
         this.name = file.getName();
@@ -22,7 +23,7 @@ public class BaseEntityDTO {
         this.owner = file.getOwner();
         this.type = file.getType();
         this.creationDate = file.getCreationDate();
-        this.UUID = file.getId().toString();//TODO Change when start using UUID
+        this.uuid = file.getUuid();
     }
 
     public BaseEntityDTO(CompositeFileEntity file, String parentFolder) {
@@ -31,31 +32,34 @@ public class BaseEntityDTO {
         this.owner = file.getOwner();
         this.creationDate = file.getCreationDate();
         this.type = file instanceof FolderEntity ? "directory" : "file";
-        this.UUID = file.getId().toString();//TODO Change when start using UUID
+        this.uuid = file.getUuid();
     }
 
-    public String getUUID() {
-        return UUID;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setUUID(String UUID) {
-        this.UUID = UUID;
+    public BaseEntityDTO setUuid(String uuid) {
+        this.uuid = uuid;
+        return this;
     }
 
     public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
+    public BaseEntityDTO setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public BaseEntityDTO setName(String name) {
         this.name = name;
+        return this;
     }
 
 
@@ -63,23 +67,27 @@ public class BaseEntityDTO {
         return parentFolder;
     }
 
-    public void setParentFolder(String parentFolder) {
+    public BaseEntityDTO setParentFolder(String parentFolder) {
         this.parentFolder = parentFolder;
+        return this;
     }
 
     public String getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public BaseEntityDTO setOwner(String owner) {
         this.owner = owner;
+        return this;
     }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public BaseEntityDTO setType(String type) {
         this.type = type;
+        return this;
     }
+
 }

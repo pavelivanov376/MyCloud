@@ -4,15 +4,26 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class CreateFileDTO {
 
-    private String fullPath;
+    private String parentFolderId;
     private MultipartFile content;
 
-    public String getFullPath() {
-        return fullPath;
+    private String uuid;
+
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setFullPath(String fullPath) {
-        this.fullPath = fullPath;
+    public CreateFileDTO setUuid(String uuid) {
+        this.uuid = uuid;
+        return this;
+    }
+
+    public String getParentFolderId() {
+        return parentFolderId;
+    }
+
+    public void setParentFolderId(String parentFolderId) {
+        this.parentFolderId = parentFolderId;
     }
 
     public MultipartFile getContent() {

@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
+import com.pavel.mycloud.dtos.CreateFileDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,8 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 @Service
 public class StorageService {
@@ -27,18 +26,15 @@ public class StorageService {
         this.s3Client = s3Client;
     }
 
-    public String uploadFile(MultipartFile file) {
-        File fileObj = convertMultiPartFileToZipFile(file);
-        String fileName = file.getOriginalFilename();
-        s3Client.putObject(new PutObjectRequest(bucketName, fileName, fileObj));
-
+    public String uploadFile(CreateFileDTO fileDTO) {
+        File fileObj = convertMultiPartFileToZipFile(fileDTO.getContent());
+        s3Client.putObject(new PutObjectRequest(bucketName, fileDTO.getUuid(), fileObj));
         fileObj.delete();
-        return "File uploaded: " + fileName;
+        return "File uploaded";
     }
 
     public String deleteFile(String fileName) {
         s3Client.deleteObject(bucketName, fileName);
-
         return fileName + " removed";
     }
 
