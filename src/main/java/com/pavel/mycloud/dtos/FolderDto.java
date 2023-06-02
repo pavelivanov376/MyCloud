@@ -3,7 +3,7 @@ package com.pavel.mycloud.dtos;
 public class FolderDto {
     private int id;
     private String name;
-    private String fullPath;
+    private String parentFolderId;
 
     private String owner;
 
@@ -26,20 +26,20 @@ public class FolderDto {
     }
 
 
-    public String getFullPath() {
-        return fullPath;
+    public String getParentFolderId() {
+        return parentFolderId;
     }
 
     public String getFullPathWithoutFolderName() {
-        return fullPath.substring(0, fullPath.lastIndexOf('/'));
+        return parentFolderId.substring(0, parentFolderId.lastIndexOf('/'));
     }
 
     public String getParentFolderName() {
-        return fullPath.substring(fullPath.lastIndexOf('/') + 1);
+        return parentFolderId.substring(parentFolderId.lastIndexOf('/') + 1);
     }
 
-    public FolderDto setFullPath(String fullPath) {
-        this.fullPath = fullPath;
+    public FolderDto setParentFolderId(String parentFolderId) {
+        this.parentFolderId = parentFolderId;
         return this;
     }
 
