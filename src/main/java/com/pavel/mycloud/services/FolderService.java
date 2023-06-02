@@ -53,7 +53,7 @@ public class FolderService {
     public String createHomeFolderForUser(UserDTO userDTO) {
         FolderDto folderDto = new FolderDto()
                 .setName(userDTO.getName())
-                .setFullPath("/root")
+                .setParentFolderId("/root")
                 .setOwner(userDTO.getName());
 
         return create(folderDto);
