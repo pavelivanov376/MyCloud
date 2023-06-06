@@ -111,7 +111,7 @@ function onUpload(event) {
     };
 
     fetch("http://localhost:80/api/upload/", requestOptions)
-        .then(alert("File was uploaded"))
+        .then(onEnterFolder(currentFolderId))
         .catch(error => console.log('error', error));
 }
 
