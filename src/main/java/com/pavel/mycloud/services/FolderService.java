@@ -37,6 +37,7 @@ public class FolderService {
 
     public String create(FolderDto folder) {
         FolderEntity folderEntity = folderEntityFactory.createFolderEntity(folder);
+
         FolderEntity savedFolder = folderRepository.save(folderEntity);
         return savedFolder.getUuid();
     }
@@ -53,7 +54,7 @@ public class FolderService {
     public String createHomeFolderForUser(UserDTO userDTO) {
         FolderDto folderDto = new FolderDto()
                 .setName(userDTO.getName())
-                .setParentFolderId("/root")
+                .setParentFolderId("10000000-0000-0000-0000-000000000001")
                 .setOwner(userDTO.getName());
 
         return create(folderDto);

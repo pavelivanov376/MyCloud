@@ -25,16 +25,10 @@ public class FileService {
 
     public void upload(CreateFileDTO fileDTO) {
         FileEntity fileEntity = fileFactory.createFileEntity(fileDTO);
+        fileDTO.setUuid(fileEntity.getUuid());
 
         fileRepository.save(fileEntity);
         storageService.uploadFile(fileDTO);
-    }
-
-    public FileEntity download(String name) {
-        FileEntity file = fileRepository.findByName(name);
-        byte[] content = storageService.downloadFile(name);
-        file.setContent(content);
-        return file;
     }
 
     public Collection<BaseEntityDTO> findAllFiles() {
@@ -56,7 +50,7 @@ public class FileService {
 
     public FileEntity findByUuid(String uuid) {
         FileEntity file = fileRepository.findByUuid(uuid);
-        byte[] content = storageService.downloadFile(uuid);
+        byte[] content = storageService.downloadFile(uuid, file.getName());
         file.setContent(content);
         return file;
     }
