@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Service
 public class StorageService {
@@ -38,8 +40,10 @@ public class StorageService {
         return fileName + " removed";
     }
 
-    public byte[] downloadFile(String fileName) {
-        S3Object s3Object = s3Client.getObject(bucketName, fileName);
+    public byte[] downloadFile(String key, String filename) {
+        S3Object s3Object = s3Client.getObject(bucketName, key);
+        s3Object.setKey(filename);
+
         S3ObjectInputStream inputStream = s3Object.getObjectContent();
         try {
             byte[] content = IOUtils.toByteArray(inputStream);

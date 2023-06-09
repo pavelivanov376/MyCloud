@@ -39,7 +39,7 @@ public class FileEntityFactory {
         fileEntity.setCreationDate(LocalDateTime.now());
         fileEntity.setUuid(UUID.randomUUID().toString());
 
-        FolderEntity parentFolder = folderService.findByUuid(fileDTO.getParentFolderId());//TODO get by parent folder id becaus in full path we pass the parentFolderID
+        FolderEntity parentFolder = folderService.findByUuid(fileDTO.getParentFolderId());
         fileEntity.setParentFolder(parentFolder);
 
         return fileEntity;

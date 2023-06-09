@@ -56,7 +56,7 @@ function onEnterFolder(folderIndex) {
             if (file.type == "file") {
                 buttonDownload.setAttribute("id", "btn_" + "_" + file.name);
                 buttonDownload.setAttribute("class", "openFile");
-                buttonDownload.setAttribute("href", "http://localhost:80/api/download/" + file.name);
+                buttonDownload.setAttribute("href", "http://localhost:80/api/download/" + file.uuid);
             } else {
                 buttonDownload.setAttribute("id", "btn_" + "_" + file.uuid);
                 buttonDownload.setAttribute("class", "openFolder");

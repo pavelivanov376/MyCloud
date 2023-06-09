@@ -3,12 +3,9 @@ package com.pavel.mycloud.dtos;
 import org.springframework.web.multipart.MultipartFile;
 
 public class CreateFileDTO {
-
     private String parentFolderId;
     private MultipartFile content;
-
     private String uuid;
-
     private String owner;
 
     public String getUuid() {
