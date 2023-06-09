@@ -6,6 +6,7 @@ import com.pavel.mycloud.helpers.FolderFinder;
 import com.pavel.mycloud.repositories.FolderRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -24,11 +25,12 @@ public class FolderEntityFactory {
         FolderEntity folderEntity = new FolderEntity();
 
         folderEntity.setName("/" + folderDto.getName());
-        folderEntity.setOwner(folderDto.getOwner());//TODO Put the actual name of the owner
+        folderEntity.setOwner(folderDto.getOwner());
 
         FolderEntity parentFolder = folderRepository.findByUuid(folderDto.getParentFolderId());
         folderEntity.setParentFolder(parentFolder);
         folderEntity.setUuid(UUID.randomUUID().toString());
+        folderEntity.setCreationDate(LocalDateTime.now());
 
         return folderEntity;
     }

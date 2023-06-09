@@ -76,9 +76,8 @@ public class FolderService {
         return result;
     }
 
-    public FolderEntity findById(String id) {
-        long folderId = Long.parseLong(id);
-        return folderRepository.findById(folderId).get();
+    public FolderEntity findByUuid(String uuid) {
+        return folderRepository.findByUuid(uuid);
     }
 
     private boolean isMainRootDirectory(FolderEntity folderEntity) {

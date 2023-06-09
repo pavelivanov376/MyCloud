@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Principal;
 import java.util.Collection;
 
 @RestController
@@ -23,11 +24,6 @@ public class FileController {
 
     public FileController(FileService fileService) {
         this.fileService = fileService;
-    }
-
-    @GetMapping("/api/files")
-    public ResponseEntity<Collection<BaseEntityDTO>> findAllFiles() {
-        return ResponseEntity.ok(fileService.findAllFiles());
     }
 
     //TODO Create a new endpoint where we return not stream directly but dto, which is built in the service so here we just receive it
@@ -41,11 +37,12 @@ public class FileController {
     }
 
     @PostMapping("/api/upload") //    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile multipartFile) throws IOException {
-    public ResponseEntity<String> uploadFile(CreateFileDTO file) throws IOException {
+    public ResponseEntity<String> uploadFile(CreateFileDTO file, Principal principal) throws IOException {
         if (file.getContent() == null || file.getContent().isEmpty()) {
             return ResponseEntity.badRequest().body("Empty File cannot be upload");
         }
 
+        file.setOwner(principal.getName());
         fileService.upload(file);
         return ResponseEntity.ok()
                 .body("File uploaded");

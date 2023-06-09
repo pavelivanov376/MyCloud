@@ -34,12 +34,12 @@ public class FileEntityFactory {
 
         fileEntity.setName(filename);
         fileEntity.setContent(contentBytes);
-        fileEntity.setOwner("Pavel");
+        fileEntity.setOwner(fileDTO.getOwner());
         fileEntity.setType(extractFileType(filename));
         fileEntity.setCreationDate(LocalDateTime.now());
         fileEntity.setUuid(UUID.randomUUID().toString());
 
-        FolderEntity parentFolder = folderService.findById(fileDTO.getParentFolderId());//TODO get by parent folder id becaus in full path we pass the parentFolderID
+        FolderEntity parentFolder = folderService.findByUuid(fileDTO.getParentFolderId());//TODO get by parent folder id becaus in full path we pass the parentFolderID
         fileEntity.setParentFolder(parentFolder);
 
         return fileEntity;

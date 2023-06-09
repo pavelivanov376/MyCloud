@@ -9,6 +9,8 @@ public class CreateFileDTO {
 
     private String uuid;
 
+    private String owner;
+
     public String getUuid() {
         return uuid;
     }
@@ -32,5 +34,14 @@ public class CreateFileDTO {
 
     public void setContent(MultipartFile content) {
         this.content = content;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public CreateFileDTO setOwner(String owner) {
+        this.owner = owner;
+        return this;
     }
 }
