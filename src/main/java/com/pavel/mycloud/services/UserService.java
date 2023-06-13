@@ -30,11 +30,13 @@ public class UserService {
 
     public void registerAndLogin(UserDTO userDTO) {
         String homeFolderId = folderService.createHomeFolderForUser(userDTO);
+        String sharedFolderId = folderService.createSharedFolderForUser(userDTO, homeFolderId);
 
         UserEntity newUser = new UserEntity()
                 .setName(userDTO.getName())
                 .setRole(UserRole.NORMAL)
                 .setHomeFolderUuid(homeFolderId)
+                .setShareFolderUuid(sharedFolderId)
                 .setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         userRepository.save(newUser);

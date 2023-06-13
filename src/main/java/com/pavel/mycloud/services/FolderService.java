@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,9 +60,17 @@ public class FolderService {
 
         return create(folderDto);
     }
+    public String createSharedFolderForUser(UserDTO userDTO, String homeFolderId) {
+        FolderDto folderDto = new FolderDto()
+                .setName("shared")
+                .setParentFolderId(homeFolderId)
+                .setOwner(userDTO.getName());
+
+        return create(folderDto);
+    }
 
     public Collection<BaseEntityDTO> listByUuid(String uuid) {
-        Collection<CompositeFileEntity> content = new ArrayList<>();
+        Collection<CompositeFileEntity> content = new LinkedHashSet<>();
 
         FolderEntity folderEntity = folderRepository.findByUuid(uuid);
         content.addAll(folderEntity.getContainedFolders());

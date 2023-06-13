@@ -20,6 +20,18 @@ public class UserEntity {
     @Column(name = "home_folder_uuid")
     private String homeFolderUuid;
 
+    @Column(name = "share_folder_uuid")
+    private String shareFolderUuid;
+
+    public String getShareFolderUuid() {
+        return shareFolderUuid;
+    }
+
+    public UserEntity setShareFolderUuid(String shareFolderUuid) {
+        this.shareFolderUuid = shareFolderUuid;
+        return this;
+    }
+
     public String getHomeFolderUuid() {
         return homeFolderUuid;
     }
@@ -63,4 +75,5 @@ public class UserEntity {
     public void setId(Long id) {
         this.id = id;
     }
+
 }
