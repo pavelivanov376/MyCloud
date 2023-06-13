@@ -1,14 +1,19 @@
 package com.pavel.mycloud.services;
 
-import com.pavel.mycloud.dtos.CreateFileDTO;
 import com.pavel.mycloud.dtos.BaseEntityDTO;
+import com.pavel.mycloud.dtos.CreateFileDTO;
+import com.pavel.mycloud.dtos.ShareFileDTO;
 import com.pavel.mycloud.entities.FileEntity;
+import com.pavel.mycloud.entities.UserEntity;
 import com.pavel.mycloud.factories.FileEntityFactory;
 import com.pavel.mycloud.repositories.FileRepository;
+import com.pavel.mycloud.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 
 @Service
 public class FileService {
@@ -16,19 +21,21 @@ public class FileService {
     private final FileEntityFactory fileFactory;
 
     private final StorageService storageService;
+    private final UserRepository userRepository;
 
-    public FileService(FileRepository fileRepository, FileEntityFactory fileFactory, StorageService storageService) {
+    public FileService(FileRepository fileRepository, FileEntityFactory fileFactory, StorageService storageService,
+                       UserRepository userRepository) {
         this.fileRepository = fileRepository;
         this.fileFactory = fileFactory;
         this.storageService = storageService;
+        this.userRepository = userRepository;
     }
 
     public void upload(CreateFileDTO fileDTO) {
         FileEntity fileEntity = fileFactory.createFileEntity(fileDTO);
-        fileDTO.setUuid(fileEntity.getUuid());
 
         fileRepository.save(fileEntity);
-        storageService.uploadFile(fileDTO);
+        storageService.uploadFile(fileDTO.setUuid(fileEntity.getUuid()));
     }
 
     public Collection<BaseEntityDTO> findAllFiles() {
@@ -39,6 +46,7 @@ public class FileService {
         }
         return fileDTOS;
     }
+
     public Collection<BaseEntityDTO> findAllByParentFolder() {
         Collection<BaseEntityDTO> folderDTOS = new HashSet<>();
 
@@ -50,8 +58,28 @@ public class FileService {
 
     public FileEntity findByUuid(String uuid) {
         FileEntity file = fileRepository.findByUuid(uuid);
-        byte[] content = storageService.downloadFile(uuid, file.getName());
+        String key = file.isShared() ? file.getShareSourceUuid() : uuid;
+        byte[] content = storageService.downloadFile(key, file.getName());
         file.setContent(content);
         return file;
+    }
+
+    @Transactional
+    public String delete(String uuid) {
+        FileEntity file = fileRepository.deleteByUuid(uuid);
+
+        return file.isShared() ? "Shared file removed" : storageService.deleteFile(uuid);
+    }
+
+    public String share(ShareFileDTO dto) {
+        Optional<UserEntity> shareUser = userRepository.findByName(dto.getShareWith());
+        if (shareUser.isPresent()) {
+            FileEntity fileEntity = fileFactory.createSharedFile(dto, shareUser.get());
+
+            fileRepository.save(fileEntity);
+            return "File " + dto.getUuid() + " shared with " + dto.getShareWith();
+        }
+
+        return "User " + dto.getShareWith() + "not found!";
     }
 }

@@ -23,7 +23,7 @@ window.onload = function () {
 //=========== List All Content of a directory ==============//
 
 function onEnterFolder(folderIndex) {
-    console.log("Entering folder" + folderIndex)
+    console.log("Entering folder " + folderIndex)
 
     let currentFolderElement = document.getElementById('currentFolder')
 
@@ -46,20 +46,37 @@ function onEnterFolder(folderIndex) {
             let ownerCol = document.createElement('td')
             let typeCol = document.createElement('td')
             let dateCol = document.createElement('td')
+            let shareCol = document.createElement('td')
+            let deleteCol = document.createElement('td')
 
             ownerCol.textContent = file.owner
             typeCol.textContent = file.type
             dateCol.textContent = file.creationDate
 
+            let shareInput = document.createElement('input')
+            shareInput.setAttribute("placeholder", "Username");
+            shareInput.setAttribute("id", "input_" + file.type + "_share-" + file.uuid);
+            if(file.name !== "/..") shareCol.appendChild(shareInput)
+
+            let shareButton = document.createElement('button')
+            shareButton.textContent = 'Share'
+            shareButton.setAttribute("id", "btn_" + file.type + "_share-" + file.uuid);
+            shareButton.addEventListener('click', onShare);
+            if(file.name !== "/..") shareCol.appendChild(shareButton)
+
+            let deleteButton = document.createElement('button')
+            deleteButton.textContent = 'Delete'
+            deleteButton.setAttribute("id", "delete_" + file.type + "-" + file.uuid);
+            deleteButton.addEventListener('click', onDelete);
+            if(file.name !== "/..") deleteCol.appendChild(deleteButton)
+
             let buttonDownload = document.createElement('a')
             buttonDownload.textContent = file.name
             if (file.type == "file") {
                 buttonDownload.setAttribute("id", "btn_" + "_" + file.name);
-                buttonDownload.setAttribute("class", "openFile");
                 buttonDownload.setAttribute("href", "http://localhost:80/api/download/" + file.uuid);
             } else {
                 buttonDownload.setAttribute("id", "btn_" + "_" + file.uuid);
-                buttonDownload.setAttribute("class", "openFolder");
                 buttonDownload.setAttribute("href", "http://localhost:80/api/folder/" + file.uuid);
                 buttonDownload.addEventListener('click', onOpenFolder);
             }
@@ -69,6 +86,8 @@ function onEnterFolder(folderIndex) {
             row.appendChild(ownerCol)
             row.appendChild(typeCol)
             row.appendChild(dateCol)
+            row.appendChild(shareCol)
+            row.appendChild(deleteCol)
 
             filesContainer.appendChild(row);
         }))
@@ -76,11 +95,63 @@ function onEnterFolder(folderIndex) {
         .catch(error => console.log('error', error));
 }
 
-//=========== Open Folder ==============//
+//=========== Delete ===================//
+function onDelete(event) {
+    event.preventDefault();
 
+    let typeIndex = event.currentTarget.id.indexOf('_');
+    let uuidIndex = event.currentTarget.id.indexOf('-');
+
+    let type = event.currentTarget.id.substring(typeIndex + 1, uuidIndex);
+    let uuid = event.currentTarget.id.substring(uuidIndex + 1);
+
+    let requestOptions = {
+        method: 'DELETE',
+        redirect: 'follow'
+    };
+
+    if (type === 'file') {
+        fetch("http://localhost:80/api/file/" + uuid, requestOptions)
+            .then(onEnterFolder(currentFolderId))
+            .catch(error => console.log('error', error));
+    } else {
+
+    }
+}
+
+//=========== Share Folder ==============//
+function onShare(event) {
+    let typeIndex = event.currentTarget.id.indexOf('_');
+    let uuidIndex = event.currentTarget.id.indexOf('-');
+
+    let type = event.currentTarget.id.substring(typeIndex + 1, uuidIndex);
+    let uuid = event.currentTarget.id.substring(uuidIndex + 1);
+
+    let data = new FormData()
+    let input = document.getElementById("input_file_share-" + uuid)
+
+    data.append('shareWith', input.value)
+    data.append('uuid', uuid)
+
+    let requestOptions = {
+        method: 'POST',
+        redirect: 'follow',
+        body: data
+    };
+
+    if (type === 'file_share') {
+        fetch("http://localhost:80/api/file/share/", requestOptions)
+            .then(onEnterFolder(currentFolderId))
+            .catch(error => console.log('error', error));
+    } else {
+
+    }
+}
+
+//=========== Open Folder ==============//
 function onOpenFolder(event) {
     event.preventDefault();
-    let uuid = event.currentTarget.id.substring(5);
+    let uuid = event.currentTarget.id.substring(5); //TODO coppy logic from onDelete
     let name = event.currentTarget.innerHTML;
 
     if (name === '/..') {
@@ -94,7 +165,6 @@ function onOpenFolder(event) {
 }
 
 //=========== Upload File ==============//
-
 let uploadFileBtn = document.getElementById('uploadFile')
 uploadFileBtn.addEventListener('click', onUpload);
 

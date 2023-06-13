@@ -1,8 +1,11 @@
 package com.pavel.mycloud.factories;
 
 import com.pavel.mycloud.dtos.CreateFileDTO;
+import com.pavel.mycloud.dtos.ShareFileDTO;
 import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.entities.FolderEntity;
+import com.pavel.mycloud.entities.UserEntity;
+import com.pavel.mycloud.repositories.FileRepository;
 import com.pavel.mycloud.services.FolderService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,9 +17,12 @@ import java.util.UUID;
 @Component
 public class FileEntityFactory {
     private final FolderService folderService;
+    private final FileRepository fileRepository;
 
-    public FileEntityFactory(FolderService folderService) {
+    public FileEntityFactory(FolderService folderService,
+                             FileRepository fileRepository) {
         this.folderService = folderService;
+        this.fileRepository = fileRepository;
     }
 
     public FileEntity createFileEntity(CreateFileDTO fileDTO) {
@@ -48,5 +54,20 @@ public class FileEntityFactory {
     private String extractFileType(String filename) {
         int indexOfDot = filename.indexOf('.');
         return filename.substring(indexOfDot + 1);
+    }
+
+    public FileEntity createSharedFile(ShareFileDTO dto, UserEntity shareUser) {
+        String shareFolderUuid = shareUser.getShareFolderUuid();
+        FolderEntity parentFolder = folderService.findByUuid(shareFolderUuid);
+
+        FileEntity file = fileRepository.findByUuid(dto.getUuid());
+        file.setParentFolder(parentFolder);
+        file.setOwner(dto.getShareWith());
+        file.setShareSourceUuid(file.isShared() ? file.getShareSourceUuid() : file.getUuid());
+        file.setUuid(UUID.randomUUID().toString());
+        file.setShared(true);
+        file.setId(null);
+
+        return file;
     }
 }

@@ -1,6 +1,7 @@
 package com.pavel.mycloud.services;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
@@ -8,13 +9,12 @@ import com.amazonaws.util.IOUtils;
 import com.pavel.mycloud.dtos.CreateFileDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 @Service
 public class StorageService {
@@ -29,29 +29,38 @@ public class StorageService {
     }
 
     public String uploadFile(CreateFileDTO fileDTO) {
-        File fileObj = convertMultiPartFileToZipFile(fileDTO.getContent());
-        s3Client.putObject(new PutObjectRequest(bucketName, fileDTO.getUuid(), fileObj));
-        fileObj.delete();
+        File file = convertMultiPartFileToZipFile(fileDTO.getContent());
+
+        s3Client.putObject(new PutObjectRequest(bucketName, fileDTO.getUuid(), file));
+
+        file.delete();
         return "File uploaded";
     }
-
+    @Transactional
     public String deleteFile(String fileName) {
         s3Client.deleteObject(bucketName, fileName);
         return fileName + " removed";
     }
 
     public byte[] downloadFile(String key, String filename) {
-        S3Object s3Object = s3Client.getObject(bucketName, key);
-        s3Object.setKey(filename);
-
-        S3ObjectInputStream inputStream = s3Object.getObjectContent();
         try {
-            byte[] content = IOUtils.toByteArray(inputStream);
-            return content;
+            S3Object s3Object = s3Client.getObject(bucketName, key);
+            s3Object.setKey(filename);
+            String updatedContentDisposition = "attachment; filename=\"" + filename + "\"";
+            s3Object.setObjectMetadata(createUpdateMetadata(s3Object, updatedContentDisposition));
+
+            S3ObjectInputStream inputStream = s3Object.getObjectContent();
+            return IOUtils.toByteArray(inputStream);
         } catch (IOException e) {
-            //TODO see how to log
+            //TODO Log it
+            return null;
         }
-        return null;
+    }
+
+    private ObjectMetadata createUpdateMetadata(S3Object s3Object, String updatedContentDisposition) {
+        ObjectMetadata objectMetadata = s3Object.getObjectMetadata();
+        objectMetadata.setContentDisposition(updatedContentDisposition);
+        return objectMetadata;
     }
 
     private File convertMultiPartFileToZipFile(MultipartFile file) {
