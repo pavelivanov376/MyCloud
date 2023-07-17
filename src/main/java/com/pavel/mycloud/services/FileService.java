@@ -2,7 +2,7 @@ package com.pavel.mycloud.services;
 
 import com.pavel.mycloud.dtos.BaseEntityDTO;
 import com.pavel.mycloud.dtos.CreateFileDTO;
-import com.pavel.mycloud.dtos.ShareFileDTO;
+import com.pavel.mycloud.dtos.ShareDTO;
 import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.entities.UserEntity;
 import com.pavel.mycloud.factories.FileEntityFactory;
@@ -64,14 +64,13 @@ public class FileService {
         return file;
     }
 
-    @Transactional
     public String delete(String uuid) {
-        FileEntity file = fileRepository.deleteByUuid(uuid);
+        fileRepository.deleteByUuid(uuid);
 
-        return file.isShared() ? "Shared file removed" : storageService.deleteFile(uuid);
+        return "File Removed";
     }
 
-    public String share(ShareFileDTO dto) {
+    public String share(ShareDTO dto) {
         Optional<UserEntity> shareUser = userRepository.findByName(dto.getShareWith());
         if (shareUser.isPresent()) {
             FileEntity fileEntity = fileFactory.createSharedFile(dto, shareUser.get());

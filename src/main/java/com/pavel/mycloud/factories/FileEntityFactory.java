@@ -1,12 +1,12 @@
 package com.pavel.mycloud.factories;
 
 import com.pavel.mycloud.dtos.CreateFileDTO;
-import com.pavel.mycloud.dtos.ShareFileDTO;
+import com.pavel.mycloud.dtos.ShareDTO;
 import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.entities.FolderEntity;
 import com.pavel.mycloud.entities.UserEntity;
 import com.pavel.mycloud.repositories.FileRepository;
-import com.pavel.mycloud.services.FolderService;
+import com.pavel.mycloud.repositories.FolderRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,13 +16,13 @@ import java.util.UUID;
 
 @Component
 public class FileEntityFactory {
-    private final FolderService folderService;
     private final FileRepository fileRepository;
+    private final FolderRepository folderRepository;
 
-    public FileEntityFactory(FolderService folderService,
-                             FileRepository fileRepository) {
-        this.folderService = folderService;
+    public FileEntityFactory(FileRepository fileRepository,
+                             FolderRepository folderRepository) {
         this.fileRepository = fileRepository;
+        this.folderRepository = folderRepository;
     }
 
     public FileEntity createFileEntity(CreateFileDTO fileDTO) {
@@ -45,7 +45,7 @@ public class FileEntityFactory {
         fileEntity.setCreationDate(LocalDateTime.now());
         fileEntity.setUuid(UUID.randomUUID().toString());
 
-        FolderEntity parentFolder = folderService.findByUuid(fileDTO.getParentFolderId());
+        FolderEntity parentFolder = folderRepository.findByUuid(fileDTO.getParentFolderId());
         fileEntity.setParentFolder(parentFolder);
 
         return fileEntity;
@@ -56,15 +56,15 @@ public class FileEntityFactory {
         return filename.substring(indexOfDot + 1);
     }
 
-    public FileEntity createSharedFile(ShareFileDTO dto, UserEntity shareUser) {
+    public FileEntity createSharedFile(ShareDTO dto, UserEntity shareUser) {
         String shareFolderUuid = shareUser.getShareFolderUuid();
-        FolderEntity parentFolder = folderService.findByUuid(shareFolderUuid);
+        FolderEntity parentFolder = folderRepository.findByUuid(shareFolderUuid);
 
         FileEntity file = fileRepository.findByUuid(dto.getUuid());
-        file.setParentFolder(parentFolder);
+        file.setUuid("shared_from_" + file.getOwner() + "_" + UUID.randomUUID().toString());
         file.setOwner(dto.getShareWith());
+        file.setParentFolder(parentFolder);
         file.setShareSourceUuid(file.isShared() ? file.getShareSourceUuid() : file.getUuid());
-        file.setUuid(UUID.randomUUID().toString());
         file.setShared(true);
         file.setId(null);
 

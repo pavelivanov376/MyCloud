@@ -1,7 +1,9 @@
 package com.pavel.mycloud.factories;
 
 import com.pavel.mycloud.dtos.FolderDto;
+import com.pavel.mycloud.dtos.ShareDTO;
 import com.pavel.mycloud.entities.FolderEntity;
+import com.pavel.mycloud.entities.UserEntity;
 import com.pavel.mycloud.helpers.FolderFinder;
 import com.pavel.mycloud.repositories.FolderRepository;
 import org.springframework.stereotype.Component;
@@ -13,7 +15,6 @@ import java.util.UUID;
 public class FolderEntityFactory {
     private final FolderFinder folderFinder;
     private final FolderRepository folderRepository;
-
 
     public FolderEntityFactory(FolderFinder folderFinder,
                                FolderRepository folderRepository) {
@@ -33,5 +34,20 @@ public class FolderEntityFactory {
         folderEntity.setCreationDate(LocalDateTime.now());
 
         return folderEntity;
+    }
+
+    public FolderEntity createSharedFolder(ShareDTO dto, UserEntity shareUser) {
+        String shareFolderUuid = shareUser.getShareFolderUuid();
+        FolderEntity parentFolder = folderRepository.findByUuid(shareFolderUuid);
+
+        FolderEntity folder = folderRepository.findByUuid(dto.getUuid());
+        folder.setParentFolder(parentFolder);
+        folder.setOwner(dto.getShareWith());
+        folder.setShareSourceUuid(folder.isShared() ? folder.getShareSourceUuid() : folder.getUuid());
+        folder.setUuid(UUID.randomUUID().toString());
+        folder.setShared(true);
+        folder.setId(null);
+
+        return folder;
     }
 }

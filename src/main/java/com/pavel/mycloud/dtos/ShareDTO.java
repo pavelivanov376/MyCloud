@@ -1,6 +1,6 @@
 package com.pavel.mycloud.dtos;
 
-public class ShareFileDTO {
+public class ShareDTO {
     private String shareWith;
     private String uuid;
 
@@ -8,7 +8,7 @@ public class ShareFileDTO {
         return uuid;
     }
 
-    public ShareFileDTO setUuid(String uuid) {
+    public ShareDTO setUuid(String uuid) {
         this.uuid = uuid;
         return this;
     }
@@ -17,7 +17,7 @@ public class ShareFileDTO {
         return shareWith;
     }
 
-    public ShareFileDTO setShareWith(String shareWith) {
+    public ShareDTO setShareWith(String shareWith) {
         this.shareWith = shareWith;
         return this;
     }

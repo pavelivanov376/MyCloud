@@ -1,13 +1,12 @@
 package com.pavel.mycloud.controllers;
 
 import com.pavel.mycloud.dtos.CreateFileDTO;
-import com.pavel.mycloud.dtos.ShareFileDTO;
+import com.pavel.mycloud.dtos.ShareDTO;
 import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.services.FileService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
@@ -35,7 +34,6 @@ public class FileController {
     }
 
     @PostMapping("/api/upload")
-    //    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile multipartFile) throws IOException {
     public ResponseEntity<String> uploadFile(CreateFileDTO file, Principal principal) throws IOException {
         if (file.getContent() == null || file.getContent().isEmpty()) {
             return ResponseEntity.badRequest().body("Empty File cannot be upload");
@@ -52,7 +50,7 @@ public class FileController {
     }
 
     @PostMapping("/api/file/share")
-    public ResponseEntity<String> shareFile(ShareFileDTO shareFileDTO) throws IOException {
-        return ResponseEntity.ok(fileService.share(shareFileDTO));
+    public ResponseEntity<String> shareFile(ShareDTO shareDTO) throws IOException {
+        return ResponseEntity.ok(fileService.share(shareDTO));
     }
 }

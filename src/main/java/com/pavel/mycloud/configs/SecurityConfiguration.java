@@ -27,35 +27,16 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests().requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers("/api/*").authenticated()
-//                .antMatchers("/", "/api/users/register", "/api/users/login", "/api/download/{filename}", "/api/folder/{id}").permitAll()
-//           /     .antMatchers("/", "/api/users/register", "/api/*", "/login", "users/register", "/api/files", "/api/download/{filename}", "/api/folder/{id}").permitAll()
-//                .antMatchers("/api/upload", "/api/folder/create").hasRole(UserRole.NORMAL.name())
                 .antMatchers("/api/users/login", "/api/users/register").anonymous()
                 .anyRequest().authenticated()//.permitAll()
                 .and()
                 .formLogin().loginPage("/api/users/login")
-//                .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
-//                .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
                 .defaultSuccessUrl("/")
                 .failureForwardUrl("/api/users/login")
                 .and()
                 .logout().logoutUrl("/api/users/logout").invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
         ;
-//        httpSecurity
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-//                        .requestMatchers("/", "/home").permitAll()
-//                        .requestMatchers("/login").anonymous()
-//                        .anyRequest().authenticated())
-//                .logout(logout -> logout
-//                        .logoutUrl("/logout")
-//                        .logoutSuccessUrl("/home")
-//                        .invalidateHttpSession(true)
-//                        .deleteCookies("JSESSIONID"))
-//                .formLogin(formLogin -> formLogin
-//                        .loginPage("/login"));
         return httpSecurity.build();
     }
 

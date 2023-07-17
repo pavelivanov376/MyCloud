@@ -20,8 +20,8 @@ window.onload = function () {
         })
         .catch(error => console.log('error', error));
 };
-//=========== List All Content of a directory ==============//
 
+//=========== List All Content of a directory ==============//
 function onEnterFolder(folderIndex) {
     console.log("Entering folder " + folderIndex)
 
@@ -46,39 +46,48 @@ function onEnterFolder(folderIndex) {
             let ownerCol = document.createElement('td')
             let typeCol = document.createElement('td')
             let dateCol = document.createElement('td')
-            let shareCol = document.createElement('td')
+            let shareInputCol = document.createElement('td')
+            let shareButtonCol = document.createElement('td')
             let deleteCol = document.createElement('td')
 
             ownerCol.textContent = file.owner
             typeCol.textContent = file.type
-            dateCol.textContent = file.creationDate
+            const date = new Date(file.creationDate);
+            if (file.name !== "/..") dateCol.textContent = date.toLocaleString();
+
 
             let shareInput = document.createElement('input')
             shareInput.setAttribute("placeholder", "Username");
+            shareInput.setAttribute("class", "form-control");
             shareInput.setAttribute("id", "input_" + file.type + "_share-" + file.uuid);
-            if(file.name !== "/..") shareCol.appendChild(shareInput)
+            if (file.name !== "/..") shareInputCol.appendChild(shareInput)
 
             let shareButton = document.createElement('button')
             shareButton.textContent = 'Share'
             shareButton.setAttribute("id", "btn_" + file.type + "_share-" + file.uuid);
+            shareButton.setAttribute("class", "btn btn-outline-dark");
             shareButton.addEventListener('click', onShare);
-            if(file.name !== "/..") shareCol.appendChild(shareButton)
+            if (file.name !== "/..") shareButtonCol.appendChild(shareButton)
 
             let deleteButton = document.createElement('button')
             deleteButton.textContent = 'Delete'
             deleteButton.setAttribute("id", "delete_" + file.type + "-" + file.uuid);
+            deleteButton.setAttribute("class", "btn btn-outline-dark");
             deleteButton.addEventListener('click', onDelete);
-            if(file.name !== "/..") deleteCol.appendChild(deleteButton)
+            if (file.name !== "/..") deleteCol.appendChild(deleteButton)
 
             let buttonDownload = document.createElement('a')
             buttonDownload.textContent = file.name
+            buttonDownload.setAttribute("class", "bold-on-hover");
             if (file.type == "file") {
-                buttonDownload.setAttribute("id", "btn_" + "_" + file.name);
+                buttonDownload.setAttribute("id", "btn_" + "_" + file.uuid);
                 buttonDownload.setAttribute("href", "http://localhost:80/api/download/" + file.uuid);
+                nameCol.setAttribute("href", "http://localhost:80/api/download/" + file.uuid);
             } else {
                 buttonDownload.setAttribute("id", "btn_" + "_" + file.uuid);
-                buttonDownload.setAttribute("href", "http://localhost:80/api/folder/" + file.uuid);
                 buttonDownload.addEventListener('click', onOpenFolder);
+                buttonDownload.setAttribute("href", "http://localhost:80/api/folder/" + file.uuid);
+                nameCol.setAttribute("href", "http://localhost:80/api/folder/" + file.uuid);
             }
             nameCol.appendChild(buttonDownload)
 
@@ -86,7 +95,8 @@ function onEnterFolder(folderIndex) {
             row.appendChild(ownerCol)
             row.appendChild(typeCol)
             row.appendChild(dateCol)
-            row.appendChild(shareCol)
+            row.appendChild(shareInputCol)
+            row.appendChild(shareButtonCol)
             row.appendChild(deleteCol)
 
             filesContainer.appendChild(row);
@@ -112,14 +122,16 @@ function onDelete(event) {
 
     if (type === 'file') {
         fetch("http://localhost:80/api/file/" + uuid, requestOptions)
-            .then(onEnterFolder(currentFolderId))
+            .then(() => setTimeout(() => onEnterFolder(currentFolderId), 50))
             .catch(error => console.log('error', error));
     } else {
-
+        fetch("http://localhost:80/api/folder/" + uuid, requestOptions)
+        .then(() => setTimeout(() => onEnterFolder(currentFolderId), 50))
+        .catch(error => console.log('error', error));
     }
 }
 
-//=========== Share Folder ==============//
+//=========== Share ==============//
 function onShare(event) {
     let typeIndex = event.currentTarget.id.indexOf('_');
     let uuidIndex = event.currentTarget.id.indexOf('-');
@@ -144,7 +156,9 @@ function onShare(event) {
             .then(onEnterFolder(currentFolderId))
             .catch(error => console.log('error', error));
     } else {
-
+        fetch("http://localhost:80/api/folder/share/", requestOptions)
+            .then(onEnterFolder(currentFolderId))
+            .catch(error => console.log('error', error));
     }
 }
 
@@ -169,6 +183,7 @@ let uploadFileBtn = document.getElementById('uploadFile')
 uploadFileBtn.addEventListener('click', onUpload);
 
 function onUpload(event) {
+    event.preventDefault();
     let data = new FormData()
     let input = document.querySelector('input[type="file"]')
     data.append('content', input.files[0])
@@ -181,7 +196,7 @@ function onUpload(event) {
     };
 
     fetch("http://localhost:80/api/upload/", requestOptions)
-        .then(onEnterFolder(currentFolderId))
+    .then(() => setTimeout(() => onEnterFolder(currentFolderId), 50))
         .catch(error => console.log('error', error));
 }
 
@@ -190,6 +205,7 @@ let createFolderBtn = document.getElementById('createFolder');
 createFolderBtn.addEventListener('click', onCreateFolder);
 
 function onCreateFolder(event) {
+    event.preventDefault();
     let folderName = document.getElementById('folderName');
     let data = new FormData();
     data.append('name', folderName.value);
@@ -202,6 +218,21 @@ function onCreateFolder(event) {
     };
 
     fetch("http://localhost:80/api/folder/create", requestOptions)
-        .then(alert("Folder was created"))
+        .then(() => setTimeout(() => onEnterFolder(currentFolderId), 50))
+        .catch(error => console.log('error', error));
+}
+
+//============== Logout ===============//
+let exitBtn = document.getElementById('exitButton');
+exitBtn.addEventListener('click', onExit);
+
+function onExit(event) {
+    let requestOptions = {
+        method: 'POST',
+        redirect: 'follow',
+    };
+
+    fetch("http://localhost:80/api/users/logout", requestOptions)
+        .then(location.assign('http://localhost:80/'))
         .catch(error => console.log('error', error));
 }

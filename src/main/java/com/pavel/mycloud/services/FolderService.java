@@ -2,34 +2,38 @@ package com.pavel.mycloud.services;
 
 import com.pavel.mycloud.dtos.BaseEntityDTO;
 import com.pavel.mycloud.dtos.FolderDto;
+import com.pavel.mycloud.dtos.ShareDTO;
 import com.pavel.mycloud.dtos.UserDTO;
 import com.pavel.mycloud.entities.CompositeFileEntity;
+import com.pavel.mycloud.entities.FileEntity;
 import com.pavel.mycloud.entities.FolderEntity;
+import com.pavel.mycloud.entities.UserEntity;
 import com.pavel.mycloud.factories.FolderEntityFactory;
 import com.pavel.mycloud.helpers.FolderFinder;
 import com.pavel.mycloud.repositories.FileRepository;
 import com.pavel.mycloud.repositories.FolderRepository;
+import com.pavel.mycloud.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class FolderService {
     private final FolderRepository folderRepository;
     private final FolderFinder folderFinder;
-    private final FolderEntityFactory folderEntityFactory;
+    private final FolderEntityFactory folderFactory;
     private final FileRepository fileRepository;
+    private final UserRepository userRepository;
 
     public FolderService(FolderRepository folderRepository, FolderFinder folderFinder, FolderEntityFactory folderEntityFactory,
-                         FileRepository fileRepository) {
+                         FileRepository fileRepository, UserRepository userRepository) {
         this.folderRepository = folderRepository;
         this.folderFinder = folderFinder;
-        this.folderEntityFactory = folderEntityFactory;
+        this.folderFactory = folderEntityFactory;
         this.fileRepository = fileRepository;
+        this.userRepository = userRepository;
     }
 
     public FolderEntity findByPath(String path) {
@@ -37,7 +41,7 @@ public class FolderService {
     }
 
     public String create(FolderDto folder) {
-        FolderEntity folderEntity = folderEntityFactory.createFolderEntity(folder);
+        FolderEntity folderEntity = folderFactory.createFolderEntity(folder);
 
         FolderEntity savedFolder = folderRepository.save(folderEntity);
         return savedFolder.getUuid();
@@ -82,7 +86,7 @@ public class FolderService {
             result.add(parent);
         }
         result.addAll(content.stream().map(e -> new BaseEntityDTO(e, uuid)).collect(Collectors.toList()));
-
+        result.sort(Comparator.comparing(BaseEntityDTO::getName));
         return result;
     }
 
@@ -92,5 +96,23 @@ public class FolderService {
 
     private boolean isMainRootDirectory(FolderEntity folderEntity) {
         return folderEntity.getParentFolder().getUuid().equals("10000000-0000-0000-0000-000000000001");
+    }
+
+    public String delete(String uuid) {
+        folderRepository.deleteByUuid(uuid);
+        return "Folder deleted";
+    }
+
+    public String share(ShareDTO dto) {
+        Optional<UserEntity> shareUser = userRepository.findByName(dto.getShareWith());
+        if (shareUser.isPresent()) {
+            FolderEntity folderEntity = folderFactory.createSharedFolder(dto, shareUser.get());
+
+            folderRepository.save(folderEntity);
+            return "Folder " + dto.getUuid() + " shared with " + dto.getShareWith();
+        }
+
+        return "User " + dto.getShareWith() + "not found!";
+
     }
 }
